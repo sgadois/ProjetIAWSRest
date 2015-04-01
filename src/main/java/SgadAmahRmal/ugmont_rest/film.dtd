@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+        <!ELEMENT movie EMPTY >
+        <!ELEMENT series EMPTY>
+        <!ELEMENT episode EMPTY>
+        <!ELEMENT root (movie*,series*, episode*)>
+        <!ATTLIST movie title CDATA #IMPLIED>
+        <!ATTLIST movie year CDATA #IMPLIED>
+        <!ATTLIST movie rated CDATA #IMPLIED>
+        <!ATTLIST movie released CDATA #IMPLIED>
+        <!ATTLIST movie runtime CDATA #IMPLIED>
+        <!ATTLIST movie genre CDATA #IMPLIED>
+        <!ATTLIST movie director CDATA #IMPLIED>
+        <!ATTLIST movie writer CDATA #IMPLIED>
+        <!ATTLIST movie actors CDATA #IMPLIED>
+        <!ATTLIST movie plot  CDATA #IMPLIED>
+        <!ATTLIST movie language CDATA #IMPLIED>
+        <!ATTLIST movie country CDATA #IMPLIED>
+        <!ATTLIST movie awards CDATA #IMPLIED>
+        <!ATTLIST movie poster CDATA #IMPLIED>
+        <!ATTLIST movie metascore CDATA #IMPLIED>
+        <!ATTLIST movie imdbRating CDATA #IMPLIED>
+        <!ATTLIST movie imdbVotes CDATA #IMPLIED>
+        <!ATTLIST movie imdbID CDATA #IMPLIED>
+        <!ATTLIST movie type CDATA #IMPLIED>
