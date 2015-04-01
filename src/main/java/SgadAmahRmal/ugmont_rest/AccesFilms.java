@@ -34,7 +34,7 @@ public class AccesFilms {
     }
 
     public void searchById(String id) {
-        test(id, null, null, "short", 2);
+        test(id, null, null, "short", 3);
     }
 
     public void searchByTitle(String title) {
@@ -42,7 +42,7 @@ public class AccesFilms {
     }
 
     public void searchByTitle(String title, String annee) {
-        test(null, title, annee, "short", 3);
+        test(null, title, annee, "short", 4);
     }
 
     private void test(String id, String titre, String annee, String plot, int nbElem) {
@@ -59,15 +59,17 @@ public class AccesFilms {
 
         NameValuePair[] data = new NameValuePair[nbElem];
         switch (nbElem) {
-            case 3:{
+            case 4:{
                 data[0] = new NameValuePair("t", titre);
                 data[1] = new NameValuePair("y", annee);
                 data[2] = new NameValuePair("plot", plot);
+                data[3] = new NameValuePair("r", "xml");
                 break;
             }
-            case 2: {
+            case 3: {
                 data[0] = new NameValuePair("i", id);
                 data[1] = new NameValuePair("plot", plot);
+                data[2] = new NameValuePair("r", "xml");
                 break;
             }
         }
