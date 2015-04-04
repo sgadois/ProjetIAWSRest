@@ -12,19 +12,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * Root resource (exposed at "myresource" path)
+ * film resource
  */
-@Path("myresource/{title : [a-zA-Z0-9]+}/{year : [0-9]*}")
-public class MyResource {
+@Path("film/{title : [a-zA-Z0-9]+}/{year : [0-9]*}")
+public class FilmResource {
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
+     * to the client as "text/xml" media type.
      *
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    @Produces(MediaType.TEXT_XML)
+    @Produces(MediaType.APPLICATION_XML)
     public String findFilms(
     		@QueryParam("title") String title, 
     		@DefaultValue("") @QueryParam("year") String year) {
@@ -33,9 +33,9 @@ public class MyResource {
     	title = title.replace(" ", "+");
     	
     	Client client = ClientBuilder.newClient();
-    	WebTarget target = client.target("http://www.omdbapi.com/?s=" + title + "&type=movie&y=" + year + "&plot=short&r=xml");
+    	WebTarget target = client.target("http://www.omdbapi.com/?s=" + title + "&type=movie&y=" + year + "&r=xml");
     	
-    	Response response = target.request(MediaType.TEXT_XML).get();
+    	Response response = target.request(MediaType.APPLICATION_XML).get();
     	if (response.getStatus() == 200) {
     		films = response.readEntity(String.class);
     	}

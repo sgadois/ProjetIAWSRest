@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -25,15 +26,15 @@ public class Database {
 	private Database() {
 		try {
 			this.connection = DriverManager.getConnection("jdbc:h2:~/test");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			this.stat = connection.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		executeStartDump();
+		try {
+			executeStartDump();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static Database getInstance() {
@@ -48,19 +49,26 @@ public class Database {
 		}
 	}
 	
-	private void executeStartDump() {
+	public ResultSet getQuery(String query) {
+		ResultSet res = null;
 		try {
-			BufferedReader read = new BufferedReader(new FileReader("dump.sql"));
+			res = stat.executeQuery(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	private void executeStartDump() throws IOException {
+		try {
+			BufferedReader read = new BufferedReader(new FileReader("src/main/resources/dump.sql"));
 			String dump = "";
 			String line;
-			try {
-				while ((line = read.readLine()) != null) {
-					dump += line;
-				}
-				executeSql(dump);
-			} catch (IOException e) {
-				e.printStackTrace();
+			while ((line = read.readLine()) != null) {
+				dump += line;
 			}
+			executeSql(dump);
+			read.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}

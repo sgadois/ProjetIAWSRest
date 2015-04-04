@@ -1,8 +1,9 @@
-package SgadAmahRmal.ugmont_rest;
+package SgadAmahRmal.ugmontRest;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
@@ -43,7 +44,8 @@ public class MyResourceTest {
      */
     @Test
     public void testGetIt() {
-        String responseMsg = target.path("myresource").request().get(String.class);
+        String responseMsg = target.path("film/bad/1990").request(MediaType.APPLICATION_XML).get(String.class);
+        System.out.println(responseMsg);
         assertEquals("Got it!", responseMsg);
     }
 }

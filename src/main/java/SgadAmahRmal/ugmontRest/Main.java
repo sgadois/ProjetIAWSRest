@@ -38,8 +38,6 @@ public class Main {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
-        MyResource res = new MyResource();
-        System.out.println(res.findFilms("bad", ""));
         System.in.read();
         server.stop();
     }
