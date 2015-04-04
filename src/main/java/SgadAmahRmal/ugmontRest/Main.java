@@ -22,7 +22,7 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in SgadAmahRmal.ugmont_rest package
-        final ResourceConfig rc = new ResourceConfig().packages("SgadAmahRmal.ugmont_rest");
+        final ResourceConfig rc = new ResourceConfig().packages("SgadAmahRmal.ugmontRest");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -38,6 +38,8 @@ public class Main {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        MyResource res = new MyResource();
+        System.out.println(res.findFilms("bad", ""));
         System.in.read();
         server.stop();
     }
