@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmont_rest;
+package SgadAmahRmal.ugmontRest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
