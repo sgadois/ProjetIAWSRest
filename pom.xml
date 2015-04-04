@@ -69,7 +69,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>SgadAmahRmal.ugmont_rest.Main</mainClass>
+                    <mainClass>SgadAmahRmal.ugmontRest.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
