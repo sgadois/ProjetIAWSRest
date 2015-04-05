@@ -3,8 +3,8 @@ package SgadAmahRmal.ugmontRest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -12,12 +12,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * film resource
+ * films resource
  */
-
-// FIXME When call this service, title parameter in findFilms() method is null
-
-@Path("film/{title : [a-zA-Z0-9]+}/{year : [0-9]*}")
+@Path("films/{title : [a-zA-Z0-9+]+}/{year : [0-9]*}")
 public class FilmResource {
 
     /**
@@ -29,11 +26,10 @@ public class FilmResource {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public String findFilms(
-    		@QueryParam("title") String title, 
-    		@DefaultValue("") @QueryParam("year") String year) {
+    		@PathParam("title") String title, 
+    		@DefaultValue("") @PathParam("year") String year) {
     	
     	String films = null;
-    	title = title.replace(" ", "+");
     	
     	Client client = ClientBuilder.newClient();
     	WebTarget target = client.target("http://www.omdbapi.com/?s=" + title + "&type=movie&y=" + year + "&r=xml");

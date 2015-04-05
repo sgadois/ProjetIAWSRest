@@ -31,9 +31,34 @@ public class FilmResourceTest {
     }
 
     @Test
-    public void testGetIt() {
-    	Response responseMsg = target.path("film").path("bad/").request(MediaType.APPLICATION_XML).get();
-        System.out.println(responseMsg.readEntity(String.class));
-        assertEquals("Got it!", responseMsg);
+    public void testFindFilmsOkNoYear() {
+    	Response responseMsg = 
+    			target.path("films").path("there+will+be+blood/")
+    			.request(MediaType.APPLICATION_XML).get();
+        assertEquals(200, responseMsg.getStatus());
+    }
+    
+    @Test
+    public void testFindFilmsOkWithYear() {
+    	Response responseMsg = 
+    			target.path("films").path("war/1981")
+    			.request(MediaType.APPLICATION_XML).get();
+        assertEquals(200, responseMsg.getStatus());
+    }
+    
+    @Test
+    public void testFindFilmsWithoutParam() {
+    	Response responseMsg = 
+    			target.path("films")
+    			.request(MediaType.APPLICATION_XML).get();
+        assertEquals(404, responseMsg.getStatus());
+    }
+    
+    @Test
+    public void testFindFilmsWithWrongParam() {
+    	Response responseMsg = 
+    			target.path("films").path("bad")
+    			.request(MediaType.APPLICATION_XML).get();
+        assertEquals(404, responseMsg.getStatus());
     }
 }
