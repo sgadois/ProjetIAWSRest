@@ -44,7 +44,6 @@ public class FilmResourceTest {
     	response = target.path("films").path("war/1981")
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(200, response.getStatus());
-        System.out.println(response.readEntity(String.class));
     }
     
     @Test
