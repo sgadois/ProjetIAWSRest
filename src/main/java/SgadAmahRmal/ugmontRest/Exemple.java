@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import SgadAmahRmal.ugmontRest.domain.Film;
-import SgadAmahRmal.ugmontRest.domain.Salle;
+import SgadAmahRmal.ugmontRest.domain.Theater;
 
 /**
  * This is an example !
@@ -24,7 +24,7 @@ public class Exemple {
 
 	@GET
     @Produces(MediaType.APPLICATION_XML)
-    public List<Salle> getFilms() {
+    public List<Theater> getFilms() {
     	ArrayList<Film> films = new ArrayList<Film>();
     	Film first = new Film();
     	first.setImdbID("15kj");
@@ -33,19 +33,18 @@ public class Exemple {
     	films.add(first);
     	films.add(second);
     	
-    	ArrayList<Salle> salles = new ArrayList<Salle>();
-    	Salle one = new Salle();
+    	ArrayList<Theater> salles = new ArrayList<Theater>();
+    	Theater one = new Theater();
     	one.setCity("city1");
-    	one.setFilms(films);
     	one.setId("01");
     	one.setName("name1");
     	one.setRegion("region1");
     	one.setZipcode("11 111");
+    	one.setFilms(films);
     	salles.add(one);
     	
-    	Salle two = new Salle();
+    	Theater two = new Theater();
     	two.setCity("city2");
-    	two.setFilms(films);
     	two.setId("02");
     	two.setName("name2");
     	two.setRegion("region2");

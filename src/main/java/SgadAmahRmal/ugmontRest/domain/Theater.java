@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class Salle {
+public class Theater {
 	
 	private String id;
 	private String name;
@@ -18,7 +18,7 @@ public class Salle {
 	private String region;
 	private List<Film> films;
 	
-	public Salle() {
+	public Theater() {
 		films = new ArrayList<Film>();
 	}
 
@@ -64,8 +64,10 @@ public class Salle {
 	}
 
 	@XmlElementWrapper
-	@XmlElement(name = "film")
+	@XmlElement(name = "film", nillable = true)
 	public List<Film> getFilms() {
+		if (films.isEmpty())
+			return null;
 		return films;
 	}
 

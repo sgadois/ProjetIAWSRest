@@ -17,6 +17,7 @@ public class FilmResourceTest {
 
     private HttpServer server;
     private WebTarget target;
+    private Response response;
 
     @Before
     public void setUp() throws Exception {
@@ -27,38 +28,36 @@ public class FilmResourceTest {
 
     @After
     public void tearDown() throws Exception {
-        server.shutdownNow();
+        response.close();
+    	server.shutdownNow();
     }
 
     @Test
     public void testFindFilmsOkNoYear() {
-    	Response responseMsg = 
-    			target.path("films").path("there+will+be+blood/")
+    	response = target.path("films").path("there+will+be+blood/")
     			.request(MediaType.APPLICATION_XML).get();
-        assertEquals(200, responseMsg.getStatus());
+        assertEquals(200, response.getStatus());
     }
     
     @Test
     public void testFindFilmsOkWithYear() {
-    	Response responseMsg = 
-    			target.path("films").path("war/1981")
+    	response = target.path("films").path("war/1981")
     			.request(MediaType.APPLICATION_XML).get();
-        assertEquals(200, responseMsg.getStatus());
+        assertEquals(200, response.getStatus());
+        System.out.println(response.readEntity(String.class));
     }
     
     @Test
     public void testFindFilmsWithoutParam() {
-    	Response responseMsg = 
-    			target.path("films")
+    	response = target.path("films")
     			.request(MediaType.APPLICATION_XML).get();
-        assertEquals(404, responseMsg.getStatus());
+        assertEquals(404, response.getStatus());
     }
     
     @Test
     public void testFindFilmsWithWrongParam() {
-    	Response responseMsg = 
-    			target.path("films").path("bad")
+    	response = target.path("films").path("bad")
     			.request(MediaType.APPLICATION_XML).get();
-        assertEquals(404, responseMsg.getStatus());
+        assertEquals(404, response.getStatus());
     }
 }
