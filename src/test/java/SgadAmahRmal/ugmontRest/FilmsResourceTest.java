@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class FilmResourceTest {
+public class FilmsResourceTest {
 
     private HttpServer server;
     private WebTarget target;

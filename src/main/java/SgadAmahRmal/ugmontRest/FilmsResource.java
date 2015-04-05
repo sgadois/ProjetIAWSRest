@@ -24,7 +24,7 @@ import SgadAmahRmal.ugmontRest.domain.OmdbFilm;
  * 
  */
 @Path("films/{title : [a-zA-Z0-9+]+}/{year : [0-9]*}")
-public class FilmResource {
+public class FilmsResource {
 
 	/**
 	 * 
@@ -37,7 +37,7 @@ public class FilmResource {
     @GET
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public List<Film> findFilms(
+    public List<Film> getFilms(
     		@PathParam("title") String title, 
     		@DefaultValue("") @PathParam("year") String year) {
     	
@@ -57,7 +57,7 @@ public class FilmResource {
     	if (response.getStatus() == 200) {
     		omdbFilms = response.readEntity(generic);
     		for (OmdbFilm omdbFilm : omdbFilms) {
-				Film film = new Film();
+    			Film film = new Film();
 				film.setImdbID(omdbFilm.getImdbID());
 				films.add(film);
 			}

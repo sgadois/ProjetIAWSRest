@@ -1,11 +1,24 @@
 package SgadAmahRmal.ugmontRest.domain;
 
+import java.net.URI;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.glassfish.jersey.linking.InjectLink;
+
+import SgadAmahRmal.ugmontRest.TheatersResource;
 
 @XmlRootElement()
 public class Film {
 
+	@InjectLink(
+			resource = TheatersResource.class,
+			method = "getTheatersByFilmId",
+			style = InjectLink.Style.ABSOLUTE)
+	@XmlAttribute
+	URI href;
+	
 	private String imdbID;
 	
 	@XmlAttribute
