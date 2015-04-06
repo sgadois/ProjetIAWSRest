@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -22,34 +21,61 @@ import SgadAmahRmal.ugmontRest.domain.OmdbFilm;
  * films resource
  * 
  */
-@Path("films/{title : [a-zA-Z0-9+]+}/{year : [0-9]*}")
+@Path("films")
 public class FilmsResource {
 
 	/**
 	 * 
-	 * Method call omdb api and return a specific result as application/xml
+	 * Method call omdb API.
 	 * 
-	 * @param title
-	 * @param year
-	 * @return as application/xml a list of imdbID's film
+	 * @param title: space are not allowed, use the "+" character
+	 * @return list of imdbID's film as application/xml 
+	 * or 204 no content status code if no result 
 	 */
     @GET
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public List<Film> getFilms(
-    		@PathParam("title") String title, 
-    		@DefaultValue("") @PathParam("year") String year) {
+    @Path("/{title : [a-zA-Z0-9+]+}")
+    public List<Film> getFilmsByTitle(
+    		@PathParam("title") String title) {
     	
+    	WebTarget target = getTarget(title, "");
+    	return getFilms(target);
+    }
+    
+    /**
+     * 
+     * Method call omdb API
+     * 
+     * @param title: space are not allowed, use the "+" character
+     * @param year: YYYY form
+     * @return list of imdbID's film as application/xml 
+	 * or 204 no content status code if no result
+     */
+    @GET
+    @Consumes(MediaType.TEXT_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("/{title : [a-zA-Z0-9+]+}/{year : [0-9]{4}}")
+    public List<Film> getFilmsByTitleAndYear(
+    		@PathParam("title") String title, 
+    		@PathParam("year") String year) {
+    	
+    	WebTarget target = getTarget(title, year);
+    	return getFilms(target);
+    }
+
+    private WebTarget getTarget(String title, String year) {
     	Client client = ClientBuilder.newClient();
-    	WebTarget target = client.target("http://www.omdbapi.com/")
+    	return client.target("http://www.omdbapi.com/")
     			.queryParam("s", title)
     			.queryParam("y", year)
     			.queryParam("type", "movie")
     			.queryParam("r", "xml");
-    	
+    }
+
+    private List<Film> getFilms(WebTarget target) {
     	List<Film> films = null;
     	OmdbFilm omdbFilms = null;
-
     	Response response = target.request(MediaType.TEXT_XML).get();
     	if (response.getStatus() == 200) {
     		omdbFilms = response.readEntity(OmdbFilm.class);
