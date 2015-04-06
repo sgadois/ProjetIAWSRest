@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -28,20 +27,18 @@ public class FilmsResource {
 
 	/**
 	 * 
-	 * Method call omdb api and return the result as application/xml
+	 * Method call omdb api and return a specific result as application/xml
 	 * 
 	 * @param title
 	 * @param year
 	 * @return as application/xml a list of imdbID's film
 	 */
     @GET
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.APPLICATION_XML)
     public List<Film> getFilms(
     		@PathParam("title") String title, 
     		@DefaultValue("") @PathParam("year") String year) {
-    	
-    	List<Film> films = new ArrayList<Film>();
     	
     	Client client = ClientBuilder.newClient();
     	WebTarget target = client.target("http://www.omdbapi.com/")
@@ -50,16 +47,19 @@ public class FilmsResource {
     			.queryParam("type", "movie")
     			.queryParam("r", "xml");
     	
-    	List<OmdbFilm> omdbFilms = null;
-    	GenericType<List<OmdbFilm>> generic = new GenericType<List<OmdbFilm>>() {};
-      
-    	Response response = target.request(MediaType.APPLICATION_XML).get();
+    	List<Film> films = null;
+    	OmdbFilm omdbFilms = null;
+
+    	Response response = target.request(MediaType.TEXT_XML).get();
     	if (response.getStatus() == 200) {
-    		omdbFilms = response.readEntity(generic);
-    		for (OmdbFilm omdbFilm : omdbFilms) {
-    			Film film = new Film();
-				film.setImdbID(omdbFilm.getImdbID());
-				films.add(film);
+    		omdbFilms = response.readEntity(OmdbFilm.class);
+			if ("True".equals(omdbFilms.getResponse())) {
+	    		films = new ArrayList<Film>();
+				for (Film omdbFilm : omdbFilms.getMovies()) {
+					Film film = new Film();
+					film.setImdbID(omdbFilm.getImdbID());
+					films.add(film);
+				}
 			}
     	}
     	return films;

@@ -1,49 +1,43 @@
 package SgadAmahRmal.ugmontRest.domain;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "Movie")
+@XmlRootElement(name = "root")
 public class OmdbFilm {
 
-	private String title;
-	private String year;
-	private String imdbID;
-	private String type;
-	
-	public String getTitle() {
-		return title;
+	private String response;
+	private String error;
+	private List<Film> movies = null;
+		
+	public String getResponse() {
+		return response;
+	}
+
+	@XmlAttribute
+	public void setResponse(String response) {
+		this.response = response;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	@XmlElement(name = "error", nillable = true)
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public List<Film> getMovies() {
+		return movies;
+	}
+
+	@XmlElement(name = "Movie", nillable = true)
+	public void setMovies(List<Film> movies) {
+		this.movies = movies;
 	}
 	
-	@XmlAttribute(name = "Title")
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public String getYear() {
-		return year;
-	}
-	
-	@XmlAttribute(name = "Year")
-	public void setYear(String year) {
-		this.year = year;
-	}
-	
-	public String getImdbID() {
-		return imdbID;
-	}
-	
-	@XmlAttribute(name = "imdbID")
-	public void setImdbID(String imdbID) {
-		this.imdbID = imdbID;
-	}
-	
-	public String getType() {
-		return type;
-	}
-	
-	@XmlAttribute(name = "Type")
-	public void setType(String type) {
-		this.type = type;
-	}
 }
