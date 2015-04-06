@@ -59,4 +59,11 @@ public class FilmsResourceTest {
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(404, response.getStatus());
     }
+
+    @Test
+    public void testFindFilmsWithNoFilmsResult() {
+    	response = target.path("films").path("elephant/1921")
+    			.request(MediaType.APPLICATION_XML).get();
+        assertEquals(204, response.getStatus());
+    }
 }
