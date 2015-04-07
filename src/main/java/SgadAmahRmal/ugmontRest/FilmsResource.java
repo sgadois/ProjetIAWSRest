@@ -3,6 +3,7 @@ package SgadAmahRmal.ugmontRest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,7 +24,7 @@ import SgadAmahRmal.ugmontRest.domain.OmdbFilm;
  */
 @Path("films")
 public class FilmsResource {
-
+	
 	/**
 	 * 
 	 * Method call omdb API.
@@ -35,7 +36,7 @@ public class FilmsResource {
     @GET
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.APPLICATION_XML)
-    @Path("/{title : [a-zA-Z0-9+]+}")
+    @Path("/{title}")
     public List<Film> getFilmsByTitle(
     		@PathParam("title") String title) {
     	
@@ -55,11 +56,15 @@ public class FilmsResource {
     @GET
     @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.APPLICATION_XML)
-    @Path("/{title : [a-zA-Z0-9+]+}/{year : [0-9]{4}}")
+    @Path("/{title}/{year}")
     public List<Film> getFilmsByTitleAndYear(
     		@PathParam("title") String title, 
     		@PathParam("year") String year) {
-    	
+
+    	if ( ! year.matches("[0-9]{4}")) {
+    		throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
+    	             .entity("Year must be composed of 4 digits").type(MediaType.TEXT_PLAIN).build());
+    	}
     	WebTarget target = getTarget(title, year);
     	return getFilms(target);
     }
