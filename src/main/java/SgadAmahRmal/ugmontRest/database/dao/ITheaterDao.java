@@ -2,8 +2,11 @@ package SgadAmahRmal.ugmontRest.database.dao;
 
 import java.util.List;
 
+import org.jvnet.hk2.annotations.Contract;
+
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
+@Contract
 public interface ITheaterDao {
 
 	/**

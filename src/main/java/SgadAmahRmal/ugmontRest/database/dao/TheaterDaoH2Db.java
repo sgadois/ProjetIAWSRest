@@ -4,13 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.jvnet.hk2.annotations.Service;
+
 import SgadAmahRmal.ugmontRest.database.Database;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
+@Service
 public class TheaterDaoH2Db implements ITheaterDao {
 
 	private Database db;
 	
+	@Inject
 	public TheaterDaoH2Db(Database db) {
 		this.db = db;
 	}
