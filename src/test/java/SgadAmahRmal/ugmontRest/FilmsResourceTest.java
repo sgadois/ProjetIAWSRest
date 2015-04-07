@@ -57,7 +57,7 @@ public class FilmsResourceTest {
     public void testFindFilmsWithWrongParam() {
     	response = target.path("films").path("bad").path("198")
     			.request(MediaType.APPLICATION_XML).get();
-        assertEquals(404, response.getStatus());
+        assertEquals(400, response.getStatus());
     }
 
     @Test

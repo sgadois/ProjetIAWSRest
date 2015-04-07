@@ -46,7 +46,7 @@ public class TheatersResource {
 		
 		if ( ! imdbID.matches("tt[0-9]{7}")) {
     		throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
-    	             .entity("Now I don't known what can I explain you").type(MediaType.TEXT_PLAIN).build());
+    	             .entity("Query param does not match imdb film id form : tt + 7 digits").type(MediaType.TEXT_PLAIN).build());
     	}
 		return dao.findByFilmId(imdbID);
 	}
