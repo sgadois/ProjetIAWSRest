@@ -1,5 +1,6 @@
 package SgadAmahRmal.ugmontRest;
 
+import SgadAmahRmal.ugmontRest.domain.Tuple;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
@@ -39,6 +40,10 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
+        TheatersResource theatersResource = new TheatersResource();
+        Tuple<String, String>[] listCriteres =  new Tuple[2];
+        listCriteres[0] = new Tuple<String,String>("id", "9");
+        listCriteres[1] = new Tuple<String,String>("city", "'La Rochelle'");
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
