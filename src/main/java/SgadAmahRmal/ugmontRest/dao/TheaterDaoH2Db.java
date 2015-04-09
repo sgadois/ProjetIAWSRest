@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest.database.dao;
+package SgadAmahRmal.ugmontRest.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

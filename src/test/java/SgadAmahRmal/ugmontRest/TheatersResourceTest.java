@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import SgadAmahRmal.ugmontRest.database.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
 public class TheatersResourceTest {

@@ -15,9 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import SgadAmahRmal.ugmontRest.database.Database;
-import SgadAmahRmal.ugmontRest.database.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.database.Tuple;
+import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
 import SgadAmahRmal.ugmontRest.domain.Theater;
-import SgadAmahRmal.ugmontRest.domain.Tuple;
 
 /**
  * theaters resource
@@ -34,12 +34,14 @@ public class TheatersResource {
 	 * Film domain class. Must be renamed too in case of change
 	 */
 	/**
+	 * Get a list of theaters associated to a film
 	 * 
 	 * @param filmID
-	 * @return
+	 * @return a list of theater as application/xml
+	 * or 204 no content status code if no result
 	 */
 	@GET
-	@Path("/{imdbID}")
+	@Path("films/{imdbID}")
 	@Produces(MediaType.APPLICATION_XML)
 	public List<Theater> getTheatersByFilmId(
 			@PathParam("imdbID") String imdbID) {

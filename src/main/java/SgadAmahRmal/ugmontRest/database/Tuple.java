@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest.domain;
+package SgadAmahRmal.ugmontRest.database;
 
 /**
  * Created by mahamat on 07/04/15.
