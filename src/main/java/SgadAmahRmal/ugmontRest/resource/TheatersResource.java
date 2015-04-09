@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

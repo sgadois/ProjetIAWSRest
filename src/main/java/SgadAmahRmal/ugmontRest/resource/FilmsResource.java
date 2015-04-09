@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,6 +12,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import SgadAmahRmal.ugmontRest.Main;
 
 public class FilmsResourceTest {
 

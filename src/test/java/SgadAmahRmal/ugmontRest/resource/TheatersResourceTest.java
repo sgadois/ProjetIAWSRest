@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import SgadAmahRmal.ugmontRest.Main;
 import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
