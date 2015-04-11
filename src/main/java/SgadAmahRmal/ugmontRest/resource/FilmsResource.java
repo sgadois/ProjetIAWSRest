@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,14 @@ public class FilmsResource {
 	 * 
 	 * Method call omdb API.
 	 * 
-	 * @param title: space are not allowed, use the "+" character
+	 * @param title: partial or complete film title
 	 * @return list of imdbID's film as application/xml 
 	 * or 204 no content status code if no result 
 	 */
     @GET
-    @Consumes(MediaType.TEXT_XML)
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    @Path("/{title}")
+    @Path("{title}")
     public List<Film> getFilmsByTitle(
     		@PathParam("title") String title) {
     	
@@ -48,15 +48,15 @@ public class FilmsResource {
      * 
      * Method call omdb API
      * 
-     * @param title: space are not allowed, use the "+" character
+     * @param title: partial or complete film title
      * @param year: YYYY form
      * @return list of imdbID's film as application/xml 
 	 * or 204 no content status code if no result
      */
     @GET
-    @Consumes(MediaType.TEXT_XML)
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    @Path("/{title}/{year}")
+    @Path("{title}/{year}")
     public List<Film> getFilmsByTitleAndYear(
     		@PathParam("title") String title, 
     		@PathParam("year") String year) {
@@ -81,7 +81,7 @@ public class FilmsResource {
     private List<Film> getFilms(WebTarget target) {
     	List<Film> films = null;
     	OmdbFilm omdbFilms = null;
-    	Response response = target.request(MediaType.TEXT_XML).get();
+    	Response response = target.request(MediaType.APPLICATION_XML).get();
     	if (response.getStatus() == 200) {
     		omdbFilms = response.readEntity(OmdbFilm.class);
 			if ("True".equals(omdbFilms.getResponse())) {

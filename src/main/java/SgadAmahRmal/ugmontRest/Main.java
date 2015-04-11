@@ -10,8 +10,8 @@ import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import SgadAmahRmal.ugmontRest.database.Database;
-import SgadAmahRmal.ugmontRest.database.dao.ITheaterDao;
-import SgadAmahRmal.ugmontRest.database.dao.TheaterDaoH2Db;
+import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.dao.TheaterDaoH2Db;
 
 /**
  * Main class.

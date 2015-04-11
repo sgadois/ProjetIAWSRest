@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.glassfish.jersey.linking.InjectLink;
 
-import SgadAmahRmal.ugmontRest.TheatersResource;
+import SgadAmahRmal.ugmontRest.resource.TheatersResource;
 
 @XmlRootElement()
 public class Film {

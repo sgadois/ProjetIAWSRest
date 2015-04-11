@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,9 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import SgadAmahRmal.ugmontRest.database.Database;
-import SgadAmahRmal.ugmontRest.database.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.database.Tuple;
+import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
 import SgadAmahRmal.ugmontRest.domain.Theater;
-import SgadAmahRmal.ugmontRest.domain.Tuple;
 
 /**
  * theaters resource
@@ -34,19 +34,21 @@ public class TheatersResource {
 	 * Film domain class. Must be renamed too in case of change
 	 */
 	/**
+	 * Get a list of theaters associated to a film
 	 * 
 	 * @param filmID
-	 * @return
+	 * @return a list of theater as application/xml
+	 * or 204 no content status code if no result
 	 */
 	@GET
-	@Path("/{imdbID}")
+	@Path("films/{imdbID}")
 	@Produces(MediaType.APPLICATION_XML)
 	public List<Theater> getTheatersByFilmId(
 			@PathParam("imdbID") String imdbID) {
 		
 		if ( ! imdbID.matches("tt[0-9]{7}")) {
     		throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
-    	             .entity("Now I don't known what can I explain you").type(MediaType.TEXT_PLAIN).build());
+    	             .entity("Query param does not match imdb film id form : tt + 7 digits").type(MediaType.TEXT_PLAIN).build());
     	}
 		return dao.findByFilmId(imdbID);
 	}

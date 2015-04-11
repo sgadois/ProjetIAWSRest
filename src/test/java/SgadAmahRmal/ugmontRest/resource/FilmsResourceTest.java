@@ -1,4 +1,4 @@
-package SgadAmahRmal.ugmontRest;
+package SgadAmahRmal.ugmontRest.resource;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,6 +12,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import SgadAmahRmal.ugmontRest.Main;
 
 public class FilmsResourceTest {
 
@@ -57,7 +59,7 @@ public class FilmsResourceTest {
     public void testFindFilmsWithWrongParam() {
     	response = target.path("films").path("bad").path("198")
     			.request(MediaType.APPLICATION_XML).get();
-        assertEquals(404, response.getStatus());
+        assertEquals(400, response.getStatus());
     }
 
     @Test
