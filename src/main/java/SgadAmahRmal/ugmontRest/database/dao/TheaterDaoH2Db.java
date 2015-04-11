@@ -21,7 +21,7 @@ public class TheaterDaoH2Db implements ITheaterDao {
 	public TheaterDaoH2Db(Database db) {
 		this.db = db;
 	}
-	
+
 	@Override
 	public Theater find(String id) {
 		ResultSet result = db.getQuery("SELECT * FROM salle WHERE id=" + id);
@@ -71,7 +71,7 @@ public class TheaterDaoH2Db implements ITheaterDao {
 	@Override
 	public void store(Theater theater) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

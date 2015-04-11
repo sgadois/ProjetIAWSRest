@@ -62,7 +62,7 @@ public class TheatersResource {
         ResultSet resultSet = Database.getInstance().getQuery(req);
         List<Theater> listSalles = new ArrayList<>();
         try {
-            while(resultSet.next()) {
+             while(resultSet.next()) {
                 Theater theater = new Theater();
                 theater.setId(resultSet.getString("id"));
                 theater.setCity(resultSet.getString("city"));
