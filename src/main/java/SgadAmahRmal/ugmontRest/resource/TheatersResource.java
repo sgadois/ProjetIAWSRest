@@ -45,40 +45,41 @@ public class TheatersResource {
 	@Produces(MediaType.APPLICATION_XML)
 	public List<Theater> getTheatersByFilmId(
 			@PathParam("imdbID") String imdbID) {
-		
+
 		if ( ! imdbID.matches("tt[0-9]{7}")) {
     		throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
-    	             .entity("Query param does not match imdb film id form : tt + 7 digits").type(MediaType.TEXT_PLAIN).build());
+                    .entity("Query param does not match imdb film id form : tt + 7 digits").type(MediaType.TEXT_PLAIN).build());
     	}
 		return dao.findByFilmId(imdbID);
 	}
 
-	
-    public List<Theater> getTheatersByFilmAny(Tuple<String, String>[] listCriteres) {
-    	String req = "select  * from salle where " + listCriteres[0].getName() + " = " +  listCriteres[0].getValue();
-
-        for(int i = 1; i < listCriteres.length; i++) {
-            req += " and " + listCriteres[i].getName() + " = " +  listCriteres[i].getValue();
+    @GET
+    @Path("search/{listOfCriteria}")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Theater> getTheatersByFilmAny(
+            @PathParam("listOfCriteria") String listOfCriteria) {
+        String A = "[a-zA-Z ]+=[a-zA-Z ]+";
+        if ( ! listOfCriteria.matches(A+"(&"+A+")*")) {
+            throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Query param does not match imdb film id form : tt + 7 digits").type(MediaType.TEXT_PLAIN).build());
         }
 
-        ResultSet resultSet = Database.getInstance().getQuery(req);
-        List<Theater> listSalles = new ArrayList<>();
-        try {
-             while(resultSet.next()) {
-                Theater theater = new Theater();
-                theater.setId(resultSet.getString("id"));
-                theater.setCity(resultSet.getString("city"));
-                theater.setName(resultSet.getString("name"));
-                theater.setRegion(resultSet.getString("departement"));
-                theater.setZipcode(resultSet.getString("zipcode"));
 
-                listSalles.add(theater);
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String [] criteria = listOfCriteria.split("&");
+        Tuple<String, String>[] listCriteres = new Tuple[criteria.length];
+        for (int i = 0; i < criteria.length ; i++) {
+            String [] criterium = criteria[i].split("=");
+            listCriteres[i] = new Tuple<>(criterium[0], "'" + criterium[1] + "'");
+            //System.out.println(criterium[0]+" "+ criterium[1]);
         }
+        return dao.findTheatersByFilmAny(listCriteres);
+    }
 
-        return  listSalles;
+    @GET
+    @Path("{imdbID}")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Theater> getTheaterByFilmId(
+            @PathParam("imdbID") String imdbID) {
+        return  dao.findByFilmId(imdbID);
     }
 }
