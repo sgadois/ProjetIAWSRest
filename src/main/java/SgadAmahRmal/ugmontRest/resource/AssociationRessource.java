@@ -55,10 +55,8 @@ public class AssociationRessource {
     }
 
     private boolean isValideSalleId(String theaterId) {
-        Tuple<String, String>[] listCriteres = new Tuple[1];
-        listCriteres[0] = new Tuple<>("id", theaterId);
-        List<Theater> theaterList = dao.findTheatersByFilmAny(listCriteres);
-        if (theaterList == null || theaterList.isEmpty()) {
+        Theater theaterList = dao.find(theaterId);
+        if (theaterList == null) {
             return false;
         }
         return true;

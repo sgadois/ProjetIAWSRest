@@ -2,9 +2,9 @@ package SgadAmahRmal.ugmontRest.dao;
 
 import java.util.List;
 
-import SgadAmahRmal.ugmontRest.database.Tuple;
 import org.jvnet.hk2.annotations.Contract;
 
+import SgadAmahRmal.ugmontRest.database.Param;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
 @Contract
@@ -37,9 +37,9 @@ public interface ITheaterDao {
      * Get a list of theater whose respect a list of criteria .
      *
      * @param listCriteres list of criteria
-     * @return list of theater
+     * @return list of theater or null if no theater for the criteria
      */
-    public List<Theater> findTheatersByFilmAny(Tuple<String, String>[] listCriteres);
+    public List<Theater> findTheatersByCriteria(List<Param> criteria);
 
     /**
      * Associate film and theater
