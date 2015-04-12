@@ -42,14 +42,12 @@ public interface ITheaterDao {
     public List<Theater> findTheatersByFilmAny(Tuple<String, String>[] listCriteres);
 
     /**
-     * Associate film and theate
+     * Associate film and theater
      *
      * @param film_title  title of film
      * @param theater_id  id of theater
-     * @return succes or fail message
+     * @return success or fail message
      */
-
     public String filmTheater(String film_title, String theater_id);
 
-    // May be some others methods...
 }

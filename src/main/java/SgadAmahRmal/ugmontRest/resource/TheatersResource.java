@@ -1,8 +1,5 @@
 package SgadAmahRmal.ugmontRest.resource;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,9 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import SgadAmahRmal.ugmontRest.database.Database;
-import SgadAmahRmal.ugmontRest.database.Tuple;
 import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.database.Tuple;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
 /**

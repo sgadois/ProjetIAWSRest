@@ -85,7 +85,7 @@ public class TheaterDaoH2Db implements ITheaterDao {
             req += " and " + listCriteres[i].getName() + " = " + listCriteres[i].getValue();
         }
 
-        ResultSet resultSet = Database.getInstance().getQuery(req);
+        ResultSet resultSet = db.getQuery(req);
         List<Theater> listSalles = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -119,7 +119,7 @@ public class TheaterDaoH2Db implements ITheaterDao {
             return "<fail>"+theater_id + " salle introuvable </fail>";
         }
         String req = "insert into film_salle(salle_id,film_id) values(" + theater_id + " , '" + filmList.get(0).getImdbID()+"')";
-        Database.getInstance().executeSql(req);
+        db.executeSql(req);
 
         return "<succes> </succes>";
     }
