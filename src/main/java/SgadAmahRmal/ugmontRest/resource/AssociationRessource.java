@@ -1,17 +1,19 @@
 package SgadAmahRmal.ugmontRest.resource;
 
-import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
-import SgadAmahRmal.ugmontRest.database.Tuple;
-import SgadAmahRmal.ugmontRest.domain.Theater;
-
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+
+import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.domain.Theater;
 
 /**
  * films resource
@@ -61,4 +63,5 @@ public class AssociationRessource {
         }
         return true;
     }
+    
 }

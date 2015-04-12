@@ -86,12 +86,5 @@ public class TheatersResource {
     	
     	return dao.findTheatersByCriteria(criteria);
     }
-
-    @GET
-    @Path("{imdbID}")
-    @Produces(MediaType.APPLICATION_XML)
-    public List<Theater> getTheaterByFilmId(
-            @PathParam("imdbID") String imdbID) {
-        return  dao.findByFilmId(imdbID);
-    }
+    
 }
