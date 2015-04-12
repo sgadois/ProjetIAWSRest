@@ -106,10 +106,10 @@ public class TheaterDaoH2Db implements ITheaterDao {
         return listSalles;
     }
 
-    public String filmTheater(String film_title, String theater_id) {
+    /*public String filmTheater(String film_title, String theater_id) {
         FilmsResource filmsResource = new FilmsResource();
         List<Film> filmList = filmsResource.getFilmsByTitle(film_title);
-        if (filmList == null || filmList.isEmpty()) {
+        if (filmList == null || filmList.isEmpty())
             return "<fail>"+film_title + " film introuvable </fail>";
         }
         Tuple<String, String>[] listCriteres = new Tuple[1];
@@ -122,6 +122,12 @@ public class TheaterDaoH2Db implements ITheaterDao {
         db.executeSql(req);
 
         return "<succes> </succes>";
+    }*/
+
+    public void filmTheater(String film_title, String theater_id) {
+
+        String req = "insert into film_salle(salle_id,film_id) values(" + theater_id + " , '" + theater_id + "')";
+        db.executeSql(req);
     }
 
 }

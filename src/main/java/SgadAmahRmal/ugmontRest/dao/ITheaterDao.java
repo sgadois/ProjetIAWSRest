@@ -48,6 +48,6 @@ public interface ITheaterDao {
      * @param theater_id  id of theater
      * @return success or fail message
      */
-    public String filmTheater(String film_title, String theater_id);
+    public void filmTheater(String film_title, String theater_id);
 
 }
