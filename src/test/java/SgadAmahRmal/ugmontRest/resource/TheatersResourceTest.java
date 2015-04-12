@@ -61,7 +61,7 @@ public class TheatersResourceTest {
 		String wrongID = "tt123456";
 		
 		// When
-		response = target.path("theaters").path(wrongID)
+		response = target.path("theaters").path("films").path(wrongID)
 				.request(MediaType.APPLICATION_XML).get();
 		
 		// Then
@@ -75,7 +75,7 @@ public class TheatersResourceTest {
 		String goodIDNotInDb = "tt0034567";
 		
 		// When
-		response = target.path("theaters").path(goodIDNotInDb)
+		response = target.path("theaters").path("films").path(goodIDNotInDb)
 				.request(MediaType.APPLICATION_XML).get();
 		
 		// Then
@@ -115,12 +115,53 @@ public class TheatersResourceTest {
 		file.close();
 		
 		// When
-		String restXml = target.path("theaters").path(id)
+		String restXml = target.path("theaters").path("films").path(id)
 				.request(MediaType.APPLICATION_XML).get(String.class);
 		
 		// Then
 		assertEquals(xml, restXml);
 	}
 	
+	@Test
+	public void testSearchTheatersEmptyQuery() {
+		// Given nothing...
+		// When
+		response = target.path("theaters").path("search")
+				.request(MediaType.APPLICATION_XML).get();
+		
+		// Then
+		assertEquals(500, response.getStatus());
+		response.close();
+	}
 	
+	@Test
+	public void testSearchTheatersQueryNotExist() {
+		// Given 
+		String keyInvalid = "truc";
+		
+		// When
+		response = target.path("theaters").path("search")
+				.queryParam(keyInvalid, "machin")
+				.request(MediaType.APPLICATION_XML).get();
+		
+		// Then
+		assertEquals(500, response.getStatus());
+		response.close();
+	}
+	
+	@Test
+	public void testSearchTheatersParamInvalid() {
+		// Given
+		String valueInvalid = "invalid";
+		
+		// When
+		response = target.path("theaters").path("search")
+				.queryParam("departement", valueInvalid)
+				.request(MediaType.APPLICATION_XML).get();
+		
+		// Then
+		assertEquals(400, response.getStatus());
+		response.close();
+	}
+
 }
