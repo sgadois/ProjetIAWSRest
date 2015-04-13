@@ -21,26 +21,27 @@ public class AssociationRessource {
 
     @Inject
     private ITheaterDao dao;
-
+    private Response response = null;
 
     /**
      * @param filmId    film id
      * @param theaterId theater id
      * @return a xml balise succes or fail
      */
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     @Path("{filmId}/{theaterId}")
-    public String storeFilmTheater(@PathParam("filmId") String filmId,
+    public Response storeFilmTheater(@PathParam("filmId") String filmId,
                                    @PathParam("theaterId") String theaterId) {
         if (!isValideFilmId(filmId) || !isValideSalleId(theaterId)) {
-            return "<fail>" + filmId + " ou " + theaterId + " film introuvable </fail>";
+            System.out.println(response.getStatus());
+            return response;
         }
-
+        System.out.println(filmId + ", " + response.getStatus() + " , " + theaterId );
         dao.filmTheater(filmId, theaterId);
 
-        return "<succes> </succes>";
+        return response;
     }
 
     private boolean isValideFilmId(String filmId) {
@@ -49,7 +50,7 @@ public class AssociationRessource {
                 .queryParam("i", filmId)
                 .queryParam("r", "xml");
 
-        Response response = target.request(MediaType.APPLICATION_XML).get();
+        response = target.request(MediaType.APPLICATION_XML).get();
 
         return (response.getStatus() == 200);
     }
