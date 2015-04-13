@@ -24,7 +24,6 @@ public class AssociationRessource {
     @Inject
     private ITheaterDao dao;
 
-
     /**
      * @param filmId    film id
      * @param theaterId theater id
@@ -57,8 +56,7 @@ public class AssociationRessource {
     }
 
     private boolean isValideSalleId(String theaterId) {
-        Theater theaterList = dao.find(theaterId);
-        if (theaterList == null) {
+        if (dao.find(theaterId) == null) {
             return false;
         }
         return true;

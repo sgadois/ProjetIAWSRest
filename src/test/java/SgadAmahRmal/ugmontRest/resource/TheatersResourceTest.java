@@ -156,11 +156,41 @@ public class TheatersResourceTest {
 		
 		// When
 		response = target.path("theaters").path("search")
-				.queryParam("departement", valueInvalid)
+				.queryParam("dep", valueInvalid)
 				.request(MediaType.APPLICATION_XML).get();
 		
 		// Then
 		assertEquals(400, response.getStatus());
+		response.close();
+	}
+	
+	@Test
+	public void testSearchTheatersParamValid() {
+		// Given
+		String valueValid = "31";
+		
+		// When
+		response = target.path("theaters").path("search")
+				.queryParam("dep", valueValid)
+				.request(MediaType.APPLICATION_XML).get();
+		
+		// Then
+		assertEquals(200, response.getStatus());
+		response.close();
+	}
+	
+	@Test
+	public void testSearchTheatersParamValidNoContent() {
+		// Given
+		String valueValid = "45";
+		
+		// When
+		response = target.path("theaters").path("search")
+				.queryParam("dep", valueValid)
+				.request(MediaType.APPLICATION_XML).get();
+		
+		// Then
+		assertEquals(204, response.getStatus());
 		response.close();
 	}
 

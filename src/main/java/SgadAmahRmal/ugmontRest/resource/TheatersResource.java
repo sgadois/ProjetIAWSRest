@@ -66,10 +66,10 @@ public class TheatersResource {
     @Path("search")
     @Produces(MediaType.APPLICATION_XML)
     public List<Theater> searchTheaters(
-    		@QueryParam("departement") String departement,
+    		@QueryParam("dep") String departement,
     		@DefaultValue("") @QueryParam("city") String city,
     		@DefaultValue("") @QueryParam("name") String name,
-    		@DefaultValue("") @QueryParam("zipcode") String zipcode) {
+    		@DefaultValue("") @QueryParam("cp") String zipcode) {
         
     	if ("".equals(departement) || !departement.matches("[0-9]{2}")) {
     		throw new BadRequestException();
