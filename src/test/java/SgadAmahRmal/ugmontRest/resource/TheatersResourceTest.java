@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 
 import SgadAmahRmal.ugmontRest.Main;
 import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
+import SgadAmahRmal.ugmontRest.database.Param;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
 public class TheatersResourceTest {
@@ -88,27 +89,13 @@ public class TheatersResourceTest {
 		// Given
 		String id = "tt0164354";
 		ITheaterDao dao = Mockito.mock(ITheaterDao.class);
-		
-		List<Theater> list = new ArrayList<Theater>(2);
-		Theater theater12 = new Theater();
-		theater12.setId("12");
-		theater12.setName("Cinéma Ecran 7");
-		theater12.setCity("Cugnaux");
-		theater12.setZipcode("31270");
-		theater12.setRegion("31");
-		Theater theater8 = new Theater();
-		theater8.setId("8");
-		theater8.setName("Entrepot");
-		theater8.setCity("Paris");
-		theater8.setZipcode("75015");
-		theater8.setRegion("75");
-		list.add(theater12);
-		list.add(theater8);
+		List<Theater> list = buildListForTheaterByFilmId(); // End of the class
 		when(dao.findByFilmId(id)).thenReturn(list);
 		
 		String xml = "";
 		String line;
-		BufferedReader file = new BufferedReader(new FileReader("src/main/resources/testGetTheatersByFilmIdResult.xml"));
+		BufferedReader file = new BufferedReader(
+				new FileReader("src/main/resources/testGetTheatersByFilmIdResult.xml"));
 		while((line = file.readLine()) != null) {
 			xml += line;
 		}
@@ -193,5 +180,87 @@ public class TheatersResourceTest {
 		assertEquals(204, response.getStatus());
 		response.close();
 	}
+	
+	@Test
+	public void testSearchTheatersParams() throws IOException {
+		// Given
+		String dep = "31";
+		String city = "toul";
+		List<Param> criteria = new ArrayList<Param>(2);
+		criteria.add(new Param("departement", dep, Param.TypeSearch.EQUAL));
+		criteria.add(new Param("city", city.toUpperCase(), Param.TypeSearch.CONTAINS));
+		ITheaterDao dao = Mockito.mock(ITheaterDao.class);
+		List<Theater> list = buildListForSearchTheater(); // End of the class
+		when(dao.findTheatersByCriteria(criteria)).thenReturn(list);
+		
+		String xml = "";
+		String line;
+		BufferedReader file = new BufferedReader(
+				new FileReader("src/main/resources/testSearchTheatersParams.xml"));
+		while((line = file.readLine()) != null) {
+			xml += line;
+		}
+		file.close();
+		
+		// When
+		String restXml = target.path("theaters").path("search")
+				.queryParam("dep", dep)
+				.queryParam("city", city)
+				.request(MediaType.APPLICATION_XML).get(String.class);
+		
+		// Then
+		assertEquals(xml, restXml);
+	}
 
+	private List<Theater> buildListForTheaterByFilmId() {
+		List<Theater> list = new ArrayList<Theater>(2);
+		Theater theater12 = new Theater();
+		theater12.setId("12");
+		theater12.setName("Cinéma Ecran 7");
+		theater12.setCity("Cugnaux");
+		theater12.setZipcode("31270");
+		theater12.setRegion("31");
+		Theater theater8 = new Theater();
+		theater8.setId("8");
+		theater8.setName("Entrepot");
+		theater8.setCity("Paris");
+		theater8.setZipcode("75015");
+		theater8.setRegion("75");
+		list.add(theater12);
+		list.add(theater8);
+		return list;
+	}
+	
+	private List<Theater> buildListForSearchTheater() {
+		List<Theater> list = new ArrayList<Theater>(4);
+		Theater theater1 = new Theater();
+		theater1.setId("1");
+		theater1.setName("Utopia");
+		theater1.setCity("Toulouse");
+		theater1.setZipcode("31000");
+		theater1.setRegion("31");
+		Theater theater4 = new Theater();
+		theater4.setId("4");
+		theater4.setName("UGC Gaumont");
+		theater4.setCity("Toulouse");
+		theater4.setZipcode("31000");
+		theater4.setRegion("31");
+		Theater theater5 = new Theater();
+		theater5.setId("5");
+		theater5.setName("Abc");
+		theater5.setCity("Toulouse");
+		theater5.setZipcode("31000");
+		theater5.setRegion("31");
+		Theater theater6 = new Theater();
+		theater6.setId("6");
+		theater6.setName("Le cratere");
+		theater6.setCity("Toulouse");
+		theater6.setZipcode("31000");
+		theater6.setRegion("31");
+		list.add(theater1);
+		list.add(theater4);
+		list.add(theater5);
+		list.add(theater6);
+		return list;
+	}
 }

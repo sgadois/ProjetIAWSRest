@@ -20,21 +20,21 @@ alter table film_salle add constraint fk_salle_id foreign key (salle_id) referen
 ALTER TABLE film_salle ADD CONSTRAINT uk_film_salle UNIQUE(salle_id, film_id);
 
 INSERT INTO salle (id, name, city, zipcode, departement) VALUES
-(1, 'Utopia', 'Toulouse', '31000', '31'),
-(2, 'Moulin du Roc', 'Niort', '79000', '79'),
-(3, 'Pathé', 'Prahecq', '79512', '79'),
-(4, 'UGC Gaumont', 'Toulouse', '31000', '31'),
-(5, 'Abc', 'Toulouse', '31000', '31'),
-(6, 'Le Cratère', 'Toulouse', '31500', '31'),
-(7, 'MK2 Bastille', 'Paris', '75011', '75'),
-(8, 'Entrepot', 'Paris', '75015', '75'),
-(9, 'La Coursive', 'La Rochelle', '17000', '17'),
-(10, 'Studio 43', 'Dunkerque', '59140', '59'),
-(11, 'Majestic', 'Lille', '59000', '59'),
-(12, 'Cinéma Ecran 7', 'Cugnaux', '31270', '31'),
-(13, 'UGC Ciné Cité', 'Bordeaux', '33000', '33'),
-(14, 'Utopia Saint-Simon', 'Bordeaux', '33000', '33'),
-(15, 'Colisée Lumière', 'Lille', '59000', '59');
+(1, 'UTOPIA', 'TOULOUSE', '31000', '31'),
+(2, 'MOULIN DU ROC', 'NIORT', '79000', '79'),
+(3, 'PATHE', 'PRAHECQ', '79512', '79'),
+(4, 'UGC GAUMONT', 'TOULOUSE', '31000', '31'),
+(5, 'ABC', 'TOULOUSE', '31000', '31'),
+(6, 'LE CRATERE', 'TOULOUSE', '31500', '31'),
+(7, 'MK2 BASTILLE', 'PARIS', '75011', '75'),
+(8, 'ENTREPOT', 'PARIS', '75015', '75'),
+(9, 'LA COURSIVE', 'LA ROCHELLE', '17000', '17'),
+(10, 'STUDIO 43', 'DUNKERQUE', '59140', '59'),
+(11, 'MAJESTIC', 'LILLE', '59000', '59'),
+(12, 'CINEMA ECRAN 7', 'CUGNAUX', '31270', '31'),
+(13, 'UGC CINE CITE', 'BORDEAUX', '33000', '33'),
+(14, 'UTOPIA SAINT-SIMON', 'BORDEAUX', '33000', '33'),
+(15, 'COLISEE LUMIERE', 'LILLE', '59000', '59');
 
 INSERT INTO film_salle (salle_id, film_id) VALUES
 (1, 'tt0138902'),

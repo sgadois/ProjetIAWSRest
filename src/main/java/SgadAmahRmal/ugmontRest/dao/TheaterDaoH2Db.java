@@ -70,12 +70,6 @@ public class TheaterDaoH2Db implements ITheaterDao {
     }
 
     @Override
-    public void store(Theater theater) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public List<Theater> findTheatersByCriteria(List<Param> criteria) {
         if (criteria.isEmpty())
         	return null;

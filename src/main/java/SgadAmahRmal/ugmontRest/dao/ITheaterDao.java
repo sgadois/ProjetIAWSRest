@@ -27,13 +27,6 @@ public interface ITheaterDao {
     List<Theater> findByFilmId(String imdbID);
 
     /**
-     * Save a new theater.
-     *
-     * @param theater to save
-     */
-    void store(Theater theater);
-
-    /**
      * Get a list of theater whose respect a list of criteria .
      *
      * @param listCriteres list of criteria
