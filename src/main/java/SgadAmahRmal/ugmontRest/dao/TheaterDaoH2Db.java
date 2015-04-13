@@ -7,12 +7,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import SgadAmahRmal.ugmontRest.database.Tuple;
-import SgadAmahRmal.ugmontRest.domain.Film;
-import SgadAmahRmal.ugmontRest.resource.FilmsResource;
 import org.jvnet.hk2.annotations.Service;
 
 import SgadAmahRmal.ugmontRest.database.Database;
+import SgadAmahRmal.ugmontRest.database.Param;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
 @Service
@@ -78,14 +76,26 @@ public class TheaterDaoH2Db implements ITheaterDao {
     }
 
     @Override
-    public List<Theater> findTheatersByFilmAny(Tuple<String, String>[] listCriteres) {
-        String req = "select  * from salle where " + listCriteres[0].getName() + " = " + listCriteres[0].getValue();
-
-        for (int i = 1; i < listCriteres.length; i++) {
-            req += " and " + listCriteres[i].getName() + " = " + listCriteres[i].getValue();
+    public List<Theater> findTheatersByCriteria(List<Param> criteria) {
+        if (criteria.isEmpty())
+        	return null;
+        
+        Param first = criteria.get(0);
+    	String query = "SELECT * FROM salle WHERE " + first.getName() + " ";
+    	if (Param.TypeSearch.CONTAINS.equals(first.getType()))
+    		query += "LIKE '%" + first.getValue() + "%' ";
+    	else
+    		query += "='" + first.getValue() + "' ";
+    	
+        for (int i = 1; i < criteria.size(); i++) {
+            query += "AND " + criteria.get(i).getName() + " ";
+            if (Param.TypeSearch.CONTAINS.equals(criteria.get(i).getType()))
+        		query += "LIKE '%" + criteria.get(i).getValue() + "%' ";
+        	else
+        		query += "='" + criteria.get(i).getValue() + "' ";
         }
 
-        ResultSet resultSet = db.getQuery(req);
+        ResultSet resultSet = db.getQuery(query);
         List<Theater> listSalles = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -95,34 +105,16 @@ public class TheaterDaoH2Db implements ITheaterDao {
                 theater.setName(resultSet.getString("name"));
                 theater.setRegion(resultSet.getString("departement"));
                 theater.setZipcode(resultSet.getString("zipcode"));
-
                 listSalles.add(theater);
-
             }
+            if ( ! listSalles.isEmpty())
+            	return listSalles;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return listSalles;
+        return null;
     }
-
-    /*public String filmTheater(String film_title, String theater_id) {
-        FilmsResource filmsResource = new FilmsResource();
-        List<Film> filmList = filmsResource.getFilmsByTitle(film_title);
-        if (filmList == null || filmList.isEmpty())
-            return "<fail>"+film_title + " film introuvable </fail>";
-        }
-        Tuple<String, String>[] listCriteres = new Tuple[1];
-        listCriteres[0] = new Tuple<>("id", theater_id);
-        List<Theater> theaterList = findTheatersByFilmAny(listCriteres);
-        if (theaterList == null || theaterList.isEmpty()) {
-            return "<fail>"+theater_id + " salle introuvable </fail>";
-        }
-        String req = "insert into film_salle(salle_id,film_id) values(" + theater_id + " , '" + filmList.get(0).getImdbID()+"')";
-        db.executeSql(req);
-
-        return "<succes> </succes>";
-    }*/
 
     public void filmTheater(String film_title, String theater_id) {
 
