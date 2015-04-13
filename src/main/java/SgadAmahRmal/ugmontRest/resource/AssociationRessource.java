@@ -1,7 +1,16 @@
 package SgadAmahRmal.ugmontRest.resource;
 
 import javax.inject.Inject;
+
 import javax.ws.rs.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -24,6 +33,7 @@ public class AssociationRessource {
 
     @Inject
     private ITheaterDao dao;
+
     private Response response = null;
 
     /**
@@ -80,8 +90,7 @@ public class AssociationRessource {
     }
 
     private boolean isValideSalleId(String theaterId) {
-        Theater theaterList = dao.find(theaterId);
-        if (theaterList == null) {
+        if (dao.find(theaterId) == null) {
             return false;
         }
         return true;

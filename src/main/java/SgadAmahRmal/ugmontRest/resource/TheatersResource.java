@@ -66,10 +66,10 @@ public class TheatersResource {
     @Path("search")
     @Produces(MediaType.APPLICATION_XML)
     public List<Theater> searchTheaters(
-    		@QueryParam("departement") String departement,
+    		@QueryParam("dep") String departement,
     		@DefaultValue("") @QueryParam("city") String city,
     		@DefaultValue("") @QueryParam("name") String name,
-    		@DefaultValue("") @QueryParam("zipcode") String zipcode) {
+    		@DefaultValue("") @QueryParam("cp") String zipcode) {
         
     	if ("".equals(departement) || !departement.matches("[0-9]{2}")) {
     		throw new BadRequestException();
@@ -78,9 +78,9 @@ public class TheatersResource {
     	List<Param> criteria = new ArrayList<Param>(4);
     	criteria.add(new Param("departement", departement, Param.TypeSearch.EQUAL));
     	if (!"".equals(city))
-    		criteria.add(new Param("city", city, Param.TypeSearch.CONTAINS));
+    		criteria.add(new Param("city", city.toUpperCase(), Param.TypeSearch.CONTAINS));
     	if (!"".equals(name))
-    		criteria.add(new Param("name", name, Param.TypeSearch.CONTAINS));
+    		criteria.add(new Param("name", name.toUpperCase(), Param.TypeSearch.CONTAINS));
     	if (!"".equals(zipcode))
     		criteria.add(new Param("zipcode", zipcode, Param.TypeSearch.EQUAL));
     	
