@@ -12,9 +12,6 @@ import SgadAmahRmal.ugmontRest.database.Database;
 import SgadAmahRmal.ugmontRest.database.Param;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
-/*
- * Enhancement: mocking database
- */
 public class TheaterDaoH2DbTest {
 
 	private Database bdd;	
