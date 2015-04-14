@@ -29,7 +29,7 @@ public interface ITheaterDao {
     /**
      * Get a list of theater whose respect a list of criteria .
      *
-     * @param listCriteres list of criteria
+     * @param criteria list of criteria
      * @return list of theater or null if no theater for the criteria
      */
     public List<Theater> findTheatersByCriteria(List<Param> criteria);
@@ -37,10 +37,10 @@ public interface ITheaterDao {
     /**
      * Associate film and theater
      *
-     * @param film_title  title of film
-     * @param theater_id  id of theater
+     * @param imdbID  title of film
+     * @param theaterId  id of theater
      * @return success or fail message
      */
-    public void filmTheater(String film_title, String theater_id);
+    public boolean saveFilmTheater(String imdbID, String theaterId);
 
 }

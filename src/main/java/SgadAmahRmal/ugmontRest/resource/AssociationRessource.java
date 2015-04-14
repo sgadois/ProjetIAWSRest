@@ -1,16 +1,11 @@
 package SgadAmahRmal.ugmontRest.resource;
 
 import javax.inject.Inject;
-
 import javax.ws.rs.*;
-
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -18,12 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
-import SgadAmahRmal.ugmontRest.domain.Theater;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import SgadAmahRmal.ugmontRest.domain.OmdbFilm;
 
 /**
  * films resource
@@ -34,66 +24,42 @@ public class AssociationRessource {
     @Inject
     private ITheaterDao dao;
 
-    private Response response = null;
-
     /**
-     * @param filmId    film id
-     * @param theaterId theater id
-     * @return a xml balise succes or fail
+     * @param filmId: an imdbID
+     * @param theaterId: a theater id
+     * @return a response:
+     * 		201 creation success
+     * 		200 association already exist
+     * 		404 invalid filmId or theaterId
      */
-    @POST
+    @PUT
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
     @Path("{filmId}/{theaterId}")
     public Response storeFilmTheater(@PathParam("filmId") String filmId,
                                    @PathParam("theaterId") String theaterId) {
-        String output;
-        if (!isValideFilmId(filmId) || !isValideSalleId(theaterId)) {
-            output = "<error> filmId ou theaterId invalid </error>";
-            return Response
-                    .ok(output, MediaType.APPLICATION_XML)
-                    .build();
+        
+        if (!isValideFilmId(filmId) || dao.find(theaterId) == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        dao.filmTheater(filmId, theaterId);
-        output = "<succes>The storage was successfully </succes>";
-        return Response
-                .ok(output, MediaType.APPLICATION_XML)
-                .build();
+        if (!dao.saveFilmTheater(filmId, theaterId))
+        	return Response.status(Response.Status.OK).build();
+        else
+        	return Response.status(Response.Status.CREATED).build();
     }
 
     private boolean isValideFilmId(String filmId) {
-        boolean resultat = false;
-        Response response1 = null;
-        Client client = ClientBuilder.newClient();
+    	OmdbFilm omdbFilms = null;
+    	Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://www.omdbapi.com/")
                 .queryParam("i", filmId)
                 .queryParam("r", "xml");
-
-        response = target.request(MediaType.APPLICATION_XML).get();
-        response1 = target.request(MediaType.APPLICATION_XML).get();
-        BufferedReader br = new BufferedReader(new InputStreamReader((InputStream)response1.getEntity()));
-        String line = null;
-        try {
-
-            br.mark(response1.getLength() + 1);
-            while(((line = br.readLine()) != null) && !resultat) {
-                resultat = line.contains("response=\"False\"");
-            }
-            br.reset();
-            br.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        Response response1 = target.request(MediaType.APPLICATION_XML).get();
+        if (response1.getStatus() == 200) {
+        	omdbFilms = response1.readEntity(OmdbFilm.class);
+        	if ("True".equals(omdbFilms.getResponse()))
+        		return true;
         }
-
-        return !resultat;
-    }
-
-    private boolean isValideSalleId(String theaterId) {
-        if (dao.find(theaterId) == null) {
-            return false;
-        }
-        return true;
+        return false;
     }
     
 }

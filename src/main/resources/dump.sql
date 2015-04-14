@@ -11,7 +11,7 @@ CREATE TABLE salle (
 );
 
 CREATE TABLE film_salle (
-	salle_id BIGINT,
+    salle_id BIGINT,
 	film_id VARCHAR(255)
 );
 

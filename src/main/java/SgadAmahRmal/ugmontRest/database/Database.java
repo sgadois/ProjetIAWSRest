@@ -13,8 +13,6 @@ import java.sql.Statement;
 /**
  * Singleton to access on database.
  * This is loaded when the application start
- * 
- * @author Romain
  *
  */
 public class Database {
@@ -46,6 +44,14 @@ public class Database {
 			stat.execute(intructionSql);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public int update(String intructionSql) {
+		try {
+			return stat.executeUpdate(intructionSql);
+		} catch (SQLException e) {
+			return 0;
 		}
 	}
 	
