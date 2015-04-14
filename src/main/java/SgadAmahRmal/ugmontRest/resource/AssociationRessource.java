@@ -2,10 +2,6 @@ package SgadAmahRmal.ugmontRest.resource;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -25,26 +21,30 @@ public class AssociationRessource {
     private ITheaterDao dao;
 
     /**
-     * @param filmId: an imdbID
-     * @param theaterId: a theater id
-     * @return a response:
-     * 		201 creation success
-     * 		200 association already exist
-     * 		404 invalid filmId or theaterId
+     * @param filmId    film id
+     * @param theaterId theater id
+     * @return a xml marker success or fail
      */
-    @PUT
+    @GET
     @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
     @Path("{filmId}/{theaterId}")
     public Response storeFilmTheater(@PathParam("filmId") String filmId,
                                    @PathParam("theaterId") String theaterId) {
-        
-        if (!isValideFilmId(filmId) || dao.find(theaterId) == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        String output;
+        if (!isValideFilmId(filmId) || !isValideSalleId(theaterId)) {
+            output = "<error> filmId ou theaterId invalid </error>";
+            return Response
+                    .ok(output, MediaType.APPLICATION_XML)
+                    .build();
         }
         if (!dao.saveFilmTheater(filmId, theaterId))
-        	return Response.status(Response.Status.OK).build();
+        	output = "<error>Storage error</error>";
         else
-        	return Response.status(Response.Status.CREATED).build();
+        	output = "<success>The storage was successfully </success>";
+        return Response
+                .ok(output, MediaType.APPLICATION_XML)
+                .build();
     }
 
     private boolean isValideFilmId(String filmId) {
@@ -60,6 +60,13 @@ public class AssociationRessource {
         		return true;
         }
         return false;
+    }
+
+    private boolean isValideSalleId(String theaterId) {
+        if (dao.find(theaterId) == null) {
+            return false;
+        }
+        return true;
     }
     
 }
