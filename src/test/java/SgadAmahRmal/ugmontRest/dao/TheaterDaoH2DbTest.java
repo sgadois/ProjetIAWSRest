@@ -1,7 +1,6 @@
 package SgadAmahRmal.ugmontRest.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +94,18 @@ public class TheaterDaoH2DbTest {
 		
 		// Then
 		assertNull(listTheaters);
+	}
+	
+	@Test
+	public void testSaveValid() {
+		boolean insert = dao.saveFilmTheater("tt0080678", "1");
+		assertTrue(insert);
+	}
+
+	@Test
+	public void testSaveInvalid() {
+		boolean insert = dao.saveFilmTheater("tt0138902", "1");
+		assertFalse(insert);
 	}
 
 }

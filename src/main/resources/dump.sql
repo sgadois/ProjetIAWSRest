@@ -11,7 +11,8 @@ CREATE TABLE salle (
 );
 
 CREATE TABLE film_salle (
-	salle_id BIGINT,
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    salle_id BIGINT,
 	film_id VARCHAR(255)
 );
 
