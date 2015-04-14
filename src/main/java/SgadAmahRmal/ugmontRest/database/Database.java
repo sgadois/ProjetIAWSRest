@@ -39,13 +39,20 @@ public class Database {
 		return INSTANCE;
 	}
 	
-	public boolean executeSql(String intructionSql) {
+	public void executeSql(String intructionSql) {
 		try {
-			return stat.execute(intructionSql);
+			stat.execute(intructionSql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+	}
+	
+	public int update(String intructionSql) {
+		try {
+			return stat.executeUpdate(intructionSql);
+		} catch (SQLException e) {
+			return 0;
+		}
 	}
 	
 	public ResultSet getQuery(String query) {
