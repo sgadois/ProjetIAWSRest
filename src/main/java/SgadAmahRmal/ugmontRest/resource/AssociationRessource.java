@@ -25,7 +25,7 @@ public class AssociationRessource {
      * @param theaterId theater id
      * @return a xml marker success or fail
      */
-    @GET
+    @PUT
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     @Path("{filmId}/{theaterId}")
