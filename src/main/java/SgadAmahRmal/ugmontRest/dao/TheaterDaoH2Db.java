@@ -113,6 +113,7 @@ public class TheaterDaoH2Db implements ITheaterDao {
     public boolean saveFilmTheater(String imdbID, String theaterId) {
         String req = "INSERT INTO film_salle (salle_id, film_id) VALUES (" + theaterId + ", '" + imdbID + "')";
         int res = db.update(req);
+        System.out.println(res);
         if (res > 0)
         	return true;
         return false;

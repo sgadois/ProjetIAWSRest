@@ -1,11 +1,7 @@
 package SgadAmahRmal.ugmontRest.resource;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -29,7 +25,7 @@ public class AssociationRessource {
      * @param theaterId theater id
      * @return a xml marker success or fail
      */
-    @PUT
+    @GET
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     @Path("{filmId}/{theaterId}")
