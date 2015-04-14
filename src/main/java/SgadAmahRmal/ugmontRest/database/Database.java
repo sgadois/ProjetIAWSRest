@@ -13,8 +13,6 @@ import java.sql.Statement;
 /**
  * Singleton to access on database.
  * This is loaded when the application start
- * 
- * @author Romain
  *
  */
 public class Database {
@@ -41,12 +39,13 @@ public class Database {
 		return INSTANCE;
 	}
 	
-	public void executeSql(String intructionSql) {
+	public boolean executeSql(String intructionSql) {
 		try {
-			stat.execute(intructionSql);
+			return stat.execute(intructionSql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	public ResultSet getQuery(String query) {

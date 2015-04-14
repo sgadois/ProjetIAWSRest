@@ -24,7 +24,7 @@ public class DatabaseTest {
 		if (res.next()) {
 			utopia = res.getString("name");
 		}
-		assertEquals("Utopia", utopia);
+		assertEquals("UTOPIA", utopia);
 	}
 
 }
