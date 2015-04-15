@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,7 +33,6 @@ public class FilmsResource {
 	 * or 204 no content status code if no result 
 	 */
     @GET
-    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     @Path("{title}")
     public List<Film> getFilmsByTitle(
@@ -54,7 +52,6 @@ public class FilmsResource {
 	 * or 204 no content status code if no result
      */
     @GET
-    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     @Path("{title}/{year}")
     public List<Film> getFilmsByTitleAndYear(
