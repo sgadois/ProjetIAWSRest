@@ -85,6 +85,20 @@ public class TheatersResourceTest {
 	}
 	
 	@Test
+	public void testGetTheatersByFilmIdNotAcceptable() {
+		// Given
+		String goodIDNotInDb = "tt0034567";
+		
+		// When
+		response = target.path("theaters").path("films").path(goodIDNotInDb)
+				.request(MediaType.TEXT_PLAIN).get();
+		
+		// Then
+		assertEquals(406, response.getStatus());
+		response.close();
+	}
+	
+	@Test
 	public void testGetTheatersByFilmIdResult() throws IOException {
 		// Given
 		String id = "tt0164354";
@@ -117,7 +131,7 @@ public class TheatersResourceTest {
 				.request(MediaType.APPLICATION_XML).get();
 		
 		// Then
-		assertEquals(500, response.getStatus());
+		assertEquals(404, response.getStatus());
 		response.close();
 	}
 	
@@ -132,7 +146,7 @@ public class TheatersResourceTest {
 				.request(MediaType.APPLICATION_XML).get();
 		
 		// Then
-		assertEquals(500, response.getStatus());
+		assertEquals(404, response.getStatus());
 		response.close();
 	}
 	
@@ -148,6 +162,22 @@ public class TheatersResourceTest {
 		
 		// Then
 		assertEquals(400, response.getStatus());
+		response.close();
+	}
+	
+
+	@Test
+	public void testSearchTheatersNotAcceptable() {
+		// Given
+		String valueValid = "31";
+		
+		// When
+		response = target.path("theaters").path("search")
+				.queryParam("dep", valueValid)
+				.request(MediaType.TEXT_PLAIN).get();
+		
+		// Then
+		assertEquals(406, response.getStatus());
 		response.close();
 	}
 	

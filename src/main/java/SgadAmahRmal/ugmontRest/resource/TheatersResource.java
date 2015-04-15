@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -71,9 +72,10 @@ public class TheatersResource {
     		@DefaultValue("") @QueryParam("name") String name,
     		@DefaultValue("") @QueryParam("cp") String zipcode) {
         
-    	if ("".equals(departement) || !departement.matches("[0-9]{2}")) {
+    	if ("".equals(departement) || departement == null)
+    		throw new NotFoundException();
+    	else if (!departement.matches("[0-9]{2}"))
     		throw new BadRequestException();
-    	}
     	
     	List<Param> criteria = new ArrayList<Param>(4);
     	criteria.add(new Param("departement", departement, Param.TypeSearch.EQUAL));
