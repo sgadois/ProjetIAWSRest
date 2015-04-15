@@ -57,10 +57,9 @@ public class AssociationRessourceTest extends TestCase {
         // When
         Response reponse = target.path("associate").path(film_id_ok).path(theater_id_ok)
                 .request(MediaType.APPLICATION_XML).put(Entity.xml(xmlString));
-        final String rest = reponse.readEntity(String.class);
 
         // Then
-        assertEquals(xmlString, rest);
+        assertEquals(201, reponse.getStatus());
     }
 
     @Test
@@ -78,9 +77,8 @@ public class AssociationRessourceTest extends TestCase {
         Response reponse = target.path("associate").path(film_id_ok).path(theater_id_ok)
                 .request(MediaType.APPLICATION_XML).put(Entity.xml(xmlString));
 
-        final String rest = reponse.readEntity(String.class);
         // Then
-        assertEquals(xmlString, rest);
+        assertEquals(200, reponse.getStatus());
     }
 
     @Test
@@ -95,8 +93,7 @@ public class AssociationRessourceTest extends TestCase {
         Response reponse = target.path("associate").path(film_id_ok).path(theater_id_ok)
                 .request(MediaType.APPLICATION_XML).put(Entity.xml(xmlString));
 
-        final String rest = reponse.readEntity(String.class);
         // Then
-        assertEquals(xmlString, rest);
+        assertEquals(404, reponse.getStatus());
     }
 }
