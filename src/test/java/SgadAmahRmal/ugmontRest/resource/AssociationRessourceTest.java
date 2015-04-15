@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -51,30 +52,15 @@ public class AssociationRessourceTest extends TestCase {
 
         when(dao.saveFilmTheater(film_id_ok, theater_id_ok)).thenReturn(true);
 
-        String xml = "";
-        String line;
-        BufferedReader file = null;
-        try {
-            file = new BufferedReader(
-                    new FileReader("src/main/resources/testStoreFilmTheaterOk.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            while ((line = file.readLine()) != null) {
-                xml += line;
-            }
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String xmlString = "<success>The storage was successfully </success>";
 
         // When
-        String restXml = target.path("associate").path(film_id_ok).path(theater_id_ok)
-                .request(MediaType.APPLICATION_XML).get(String.class);
+        Response reponse = target.path("associate").path(film_id_ok).path(theater_id_ok)
+                .request(MediaType.APPLICATION_XML).put(Entity.xml(xmlString));
+        final String rest = reponse.readEntity(String.class);
 
         // Then
-        assertEquals(xml, restXml);
+        assertEquals(xmlString, rest);
     }
 
     @Test
@@ -86,30 +72,15 @@ public class AssociationRessourceTest extends TestCase {
 
         when(dao.saveFilmTheater(film_id_ok, theater_id_ok)).thenReturn(false);
 
-        String xml = "";
-        String line;
-        BufferedReader file = null;
-        try {
-            file = new BufferedReader(
-                    new FileReader("src/main/resources/testStorageErrorFilmTheater.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            while ((line = file.readLine()) != null) {
-                xml += line;
-            }
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String xmlString = "<error>Storage error</error>";
 
         // When
-        String restXml = target.path("associate").path(film_id_ok).path(theater_id_ok)
-                .request(MediaType.APPLICATION_XML).get(String.class);
+        Response reponse = target.path("associate").path(film_id_ok).path(theater_id_ok)
+                .request(MediaType.APPLICATION_XML).put(Entity.xml(xmlString));
 
+        final String rest = reponse.readEntity(String.class);
         // Then
-        assertEquals(xml, restXml);
+        assertEquals(xmlString, rest);
     }
 
     @Test
@@ -118,29 +89,14 @@ public class AssociationRessourceTest extends TestCase {
         String film_id_ok = "56";
         String theater_id_ok = "1";
 
-        String xml = "";
-        String line;
-        BufferedReader file = null;
-        try {
-            file = new BufferedReader(
-                    new FileReader("src/main/resources/testStoreFilmTheaterNoOk.xml"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            while ((line = file.readLine()) != null) {
-                xml += line;
-            }
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String xmlString = "<error> filmId ou theaterId invalid </error>";
 
         // When
-        String restXml = target.path("associate").path(film_id_ok).path(theater_id_ok)
-                .request(MediaType.APPLICATION_XML).get(String.class);
+        Response reponse = target.path("associate").path(film_id_ok).path(theater_id_ok)
+                .request(MediaType.APPLICATION_XML).put(Entity.xml(xmlString));
 
+        final String rest = reponse.readEntity(String.class);
         // Then
-        assertEquals(xml, restXml);
+        assertEquals(xmlString, rest);
     }
 }
