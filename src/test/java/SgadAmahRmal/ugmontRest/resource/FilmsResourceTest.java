@@ -36,14 +36,17 @@ public class FilmsResourceTest {
 
     @Test
     public void testFindFilmsOkNoYear() {
-    	response = target.path("films").path("there+will+be+blood")
+    	response = target.path("films")
+    			.queryParam("title", "there+will+be+blood")
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(200, response.getStatus());
     }
     
     @Test
     public void testFindFilmsOkWithYear() {
-    	response = target.path("films").path("war").path("1981")
+    	response = target.path("films")
+    			.queryParam("title", "war")
+    			.queryParam("year", "1981")
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(200, response.getStatus());
     }
@@ -57,14 +60,18 @@ public class FilmsResourceTest {
     
     @Test
     public void testFindFilmsWithWrongParam() {
-    	response = target.path("films").path("bad").path("198")
+    	response = target.path("films")
+    			.queryParam("title", "bad")
+    			.queryParam("year", "198")
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(400, response.getStatus());
     }
 
     @Test
     public void testFindFilmsWithNoFilmsResult() {
-    	response = target.path("films").path("elephant").path("1921")
+    	response = target.path("films")
+    			.queryParam("title", "elephant")
+    			.queryParam("year", "1921")
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(204, response.getStatus());
     }

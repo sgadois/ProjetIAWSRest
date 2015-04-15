@@ -21,28 +21,12 @@ import SgadAmahRmal.ugmontRest.domain.Theater;
  */
 @Path("films")
 public class FilmsResource {
-    @Inject
+    
+	@Inject
     private ITheaterDao dao;
 
     /**
-     * Method call omdb API.
-     *
-     * @param title: partial or complete film title
-     * @return list of imdbID's film as application/xml
-     * or 204 no content status code if no result
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    @Path("{title}")
-    public List<Film> getFilmsByTitle(
-            @PathParam("title") String title) {
-
-        WebTarget target = getTarget(title, "");
-        return getFilms(target);
-    }
-
-    /**
-     * Method call omdb API
+     * Search a film by title and optionally by year.
      *
      * @param title: partial or complete film title
      * @param year:  YYYY form
@@ -51,33 +35,27 @@ public class FilmsResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    @Path("{title}/{year}")
-    public List<Film> getFilmsByTitleAndYear(
-            @PathParam("title") String title,
-            @PathParam("year") String year) {
+    public List<Film> searchFilms(
+            @QueryParam("title") String title,
+            @DefaultValue("") @QueryParam("year") String year) {
 
-        if (!year.matches("[0-9]{4}")) {
+    	if ("".equals(title) || title == null)
+    		throw new NotFoundException();
+    	if (!"".equals(year) && !year.matches("[0-9]{4}")) {
             throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("Year must be composed of 4 digits").type(MediaType.TEXT_PLAIN).build());
         }
-        WebTarget target = getTarget(title, year);
-        return getFilms(target);
-    }
-
-    private WebTarget getTarget(String title, String year) {
-        Client client = ClientBuilder.newClient();
-        return client.target("http://www.omdbapi.com/")
+    	
+    	List<Film> films = null;
+        OmdbFilm omdbFilms = null;
+    	Client client = ClientBuilder.newClient();
+    	Response response = client.target("http://www.omdbapi.com/")
                 .queryParam("s", title)
                 .queryParam("y", year)
                 .queryParam("type", "movie")
-                .queryParam("r", "xml");
-    }
-
-    private List<Film> getFilms(WebTarget target) {
-        List<Film> films = null;
-        OmdbFilm omdbFilms = null;
-        Response response = target.request(MediaType.APPLICATION_XML).get();
-        if (response.getStatus() == 200) {
+                .queryParam("r", "xml")
+                .request(MediaType.APPLICATION_XML).get();
+    	if (response.getStatus() == 200) {
             omdbFilms = response.readEntity(OmdbFilm.class);
             if ("True".equals(omdbFilms.getResponse())) {
                 films = new ArrayList<Film>();
@@ -101,14 +79,14 @@ public class FilmsResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    @Path("{theaters}")
+    @Path("theaters")
     public Response storeFilmTheater(
             Film film,
             List<Theater> theaters) {
         Response responseNotFound = null;
         Response responseOk = null;
         Response responseCreated = null;
-        if (!isValideFilmId(film.getImdbID())) {
+        if (isValideFilmId(film.getImdbID())) {
             for (Theater theater : theaters) {
                 if ((dao.find(theater.getId()) == null) && (responseNotFound == null)) {
                     responseNotFound = Response.status(Response.Status.NOT_FOUND).build();

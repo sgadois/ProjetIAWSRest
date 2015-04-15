@@ -64,7 +64,6 @@ public class TheatersResource {
 	 * or 204 no content status code if no result
 	 */
     @GET
-    @Path("search")
     @Produces(MediaType.APPLICATION_XML)
     public List<Theater> searchTheaters(
     		@QueryParam("dep") String departement,

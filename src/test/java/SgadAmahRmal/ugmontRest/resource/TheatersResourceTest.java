@@ -127,7 +127,7 @@ public class TheatersResourceTest {
 	public void testSearchTheatersEmptyQuery() {
 		// Given nothing...
 		// When
-		response = target.path("theaters").path("search")
+		response = target.path("theaters")
 				.request(MediaType.APPLICATION_XML).get();
 		
 		// Then
@@ -141,7 +141,7 @@ public class TheatersResourceTest {
 		String keyInvalid = "truc";
 		
 		// When
-		response = target.path("theaters").path("search")
+		response = target.path("theaters")
 				.queryParam(keyInvalid, "machin")
 				.request(MediaType.APPLICATION_XML).get();
 		
@@ -156,7 +156,7 @@ public class TheatersResourceTest {
 		String valueInvalid = "invalid";
 		
 		// When
-		response = target.path("theaters").path("search")
+		response = target.path("theaters")
 				.queryParam("dep", valueInvalid)
 				.request(MediaType.APPLICATION_XML).get();
 		
@@ -172,7 +172,7 @@ public class TheatersResourceTest {
 		String valueValid = "31";
 		
 		// When
-		response = target.path("theaters").path("search")
+		response = target.path("theaters")
 				.queryParam("dep", valueValid)
 				.request(MediaType.TEXT_PLAIN).get();
 		
@@ -187,7 +187,7 @@ public class TheatersResourceTest {
 		String valueValid = "31";
 		
 		// When
-		response = target.path("theaters").path("search")
+		response = target.path("theaters")
 				.queryParam("dep", valueValid)
 				.request(MediaType.APPLICATION_XML).get();
 		
@@ -202,7 +202,7 @@ public class TheatersResourceTest {
 		String valueValid = "45";
 		
 		// When
-		response = target.path("theaters").path("search")
+		response = target.path("theaters")
 				.queryParam("dep", valueValid)
 				.request(MediaType.APPLICATION_XML).get();
 		
@@ -233,7 +233,7 @@ public class TheatersResourceTest {
 		file.close();
 		
 		// When
-		String restXml = target.path("theaters").path("search")
+		String restXml = target.path("theaters")
 				.queryParam("dep", dep)
 				.queryParam("city", city)
 				.request(MediaType.APPLICATION_XML).get(String.class);
