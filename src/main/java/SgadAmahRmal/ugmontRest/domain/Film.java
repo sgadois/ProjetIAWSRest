@@ -7,13 +7,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.glassfish.jersey.linking.InjectLink;
 
-import SgadAmahRmal.ugmontRest.resource.TheatersResource;
+import SgadAmahRmal.ugmontRest.resource.FilmsResource;
 
 @XmlRootElement()
 public class Film {
 
 	@InjectLink(
-			resource = TheatersResource.class,
+			resource = FilmsResource.class,
 			method = "getTheatersByFilmId",
 			style = InjectLink.Style.ABSOLUTE)
 	@XmlAttribute

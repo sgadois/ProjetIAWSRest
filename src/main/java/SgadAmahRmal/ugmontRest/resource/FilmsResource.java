@@ -1,5 +1,6 @@
 package SgadAmahRmal.ugmontRest.resource;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,17 +13,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
 import SgadAmahRmal.ugmontRest.domain.Film;
 import SgadAmahRmal.ugmontRest.domain.OmdbFilm;
+import SgadAmahRmal.ugmontRest.domain.Theater;
 
 /**
  * films resource
@@ -78,7 +84,7 @@ public class FilmsResource {
     }
 
     /**
-     * @param film:   an imdbID
+     * @param film: an imdbID
      * @param theaters: a theater id
      * @return a response:
      * 201 creation success
@@ -90,19 +96,25 @@ public class FilmsResource {
     @Path("theaters")
     public Response storeFilmTheater(
             @FormParam("imdbID") String filmId,
-            @FormParam("theaterList") List<String> theatersIds) {
+            @FormParam("theaterList") List<String> theatersIds,
+            @Context UriInfo uri) {
+    	
         Response responseNotFound = null;
         Response responseOk = null;
         Response responseCreated = null;
         if (isValideFilmId(filmId)) {
             for (String theater : theatersIds) {
-                if ((dao.find(theater) == null) && (responseNotFound == null)) {
+                if (dao.find(theater) == null && responseNotFound == null) {
                     responseNotFound = Response.status(Response.Status.NOT_FOUND).build();
                 }
-                if ((!dao.saveFilmTheater(filmId, theater)) && (responseOk == null))
+                else if (!dao.saveFilmTheater(filmId, theater) && responseOk == null)
                     responseOk = Response.status(Response.Status.OK).build();
-                else
-                    responseCreated = Response.status(Response.Status.CREATED).build();
+                else {
+                	// TODO find a solution less dependente on the context
+                	UriBuilder uriBuilder = uri.getAbsolutePathBuilder().replacePath("myapp/films");
+                	URI locationHeader = uriBuilder.path(filmId).path("theaters").build();
+                    responseCreated = Response.created(locationHeader).build();
+                }
             }
         }
         if (responseCreated != null)
@@ -126,4 +138,24 @@ public class FilmsResource {
         }
         return false;
     }
+    
+    /*
+	 * Note that the name of this method is used as a String in the 
+	 * Film domain class. Must be renamed too in case of change
+	 */
+	/**
+	 * Get a list of theaters associated to an imdb film ID
+	 * 
+	 * @param filmID
+	 * @return a list of theater as application/xml
+	 * or 204 no content status code if no result
+	 */
+	@GET
+	@Path("{imdbID : tt[0-9]{7}}/theaters")
+	@Produces(MediaType.APPLICATION_XML)
+	public List<Theater> getTheatersByFilmId(
+			@PathParam("imdbID") String imdbID) {
+
+		return dao.findByFilmId(imdbID);
+	}
 }
