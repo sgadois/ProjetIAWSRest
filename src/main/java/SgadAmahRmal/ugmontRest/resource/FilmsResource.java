@@ -21,6 +21,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NoContentException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -99,6 +100,8 @@ public class FilmsResource {
             @FormParam("theaterList") List<String> theatersIds,
             @Context UriInfo uri) {
     	
+    	if (filmId == null || theatersIds == null)
+    		throw new BadRequestException();
         Response responseNotFound = null;
         Response responseOk = null;
         Response responseCreated = null;
