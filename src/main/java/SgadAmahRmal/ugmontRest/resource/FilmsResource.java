@@ -78,20 +78,20 @@ public class FilmsResource {
      * 404 invalid filmId or theaterId
      */
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("theaters")
     public Response storeFilmTheater(
-            Film film,
-            List<Theater> theaters) {
+            @FormParam("imdbID") String filmId,
+            @FormParam("theaterList") List<String> theatersIds) {
         Response responseNotFound = null;
         Response responseOk = null;
         Response responseCreated = null;
-        if (isValideFilmId(film.getImdbID())) {
-            for (Theater theater : theaters) {
-                if ((dao.find(theater.getId()) == null) && (responseNotFound == null)) {
+        if (isValideFilmId(filmId)) {
+            for (String theater : theatersIds) {
+                if ((dao.find(theater) == null) && (responseNotFound == null)) {
                     responseNotFound = Response.status(Response.Status.NOT_FOUND).build();
                 }
-                if ((!dao.saveFilmTheater(film.getImdbID(), theater.getId())) && (responseOk == null))
+                if ((!dao.saveFilmTheater(filmId, theater)) && (responseOk == null))
                     responseOk = Response.status(Response.Status.OK).build();
                 else
                     responseCreated = Response.status(Response.Status.CREATED).build();
