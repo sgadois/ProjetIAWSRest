@@ -35,8 +35,8 @@ import SgadAmahRmal.ugmontRest.domain.Theater;
  */
 @Path("films")
 public class FilmsResource {
-    
-	@Inject
+
+    @Inject
     private ITheaterDao dao;
 
     /**
@@ -53,23 +53,23 @@ public class FilmsResource {
             @QueryParam("title") String title,
             @DefaultValue("") @QueryParam("year") String year) {
 
-    	if ("".equals(title) || title == null)
-    		throw new NotFoundException();
-    	if (!"".equals(year) && !year.matches("[0-9]{4}")) {
+        if ("".equals(title) || title == null)
+            throw new NotFoundException();
+        if (!"".equals(year) && !year.matches("[0-9]{4}")) {
             throw new BadRequestException(Response.status(Response.Status.BAD_REQUEST)
                     .entity("Year must be composed of 4 digits").type(MediaType.TEXT_PLAIN).build());
         }
-    	
-    	List<Film> films = null;
+
+        List<Film> films = null;
         OmdbFilm omdbFilms = null;
-    	Client client = ClientBuilder.newClient();
-    	Response response = client.target("http://www.omdbapi.com/")
+        Client client = ClientBuilder.newClient();
+        Response response = client.target("http://www.omdbapi.com/")
                 .queryParam("s", title)
                 .queryParam("y", year)
                 .queryParam("type", "movie")
                 .queryParam("r", "xml")
                 .request(MediaType.APPLICATION_XML).get();
-    	if (response.getStatus() == 200) {
+        if (response.getStatus() == 200) {
             omdbFilms = response.readEntity(OmdbFilm.class);
             if ("True".equals(omdbFilms.getResponse())) {
                 films = new ArrayList<Film>();
@@ -84,9 +84,8 @@ public class FilmsResource {
     }
 
     /**
-     * 
      * @param association
-     * @param uri: context
+     * @param uri:        context
      * @return response
      */
     @POST
@@ -95,32 +94,38 @@ public class FilmsResource {
     public Response storeFilmTheater(
             FilmTheater association,
             @Context UriInfo uri) {
-    	
-    	if (association.getImdbID() == null || association.getTheaterIds() == null)
-    		throw new BadRequestException();
+
+        if (association.getImdbID() == null || association.getTheaterIds() == null)
+            throw new BadRequestException();
         Response responseNotFound = null;
         Response responseOk = null;
         Response responseCreated = null;
+        Response responseFilmIdKo = null;
         if (isValideFilmId(association.getImdbID())) {
             for (String theater : association.getTheaterIds()) {
-                if (dao.find(theater) == null && responseNotFound == null) {
+                if (dao.find(theater) == null) {
                     responseNotFound = Response.status(Response.Status.NOT_FOUND).build();
-                }
-                else if (!dao.saveFilmTheater(association.getImdbID(), theater) && responseOk == null)
+                } else if (!dao.saveFilmTheater(association.getImdbID(), theater))
                     responseOk = Response.status(Response.Status.OK).build();
                 else {
-                	// TODO find a solution less dependente on the context
-                	UriBuilder uriBuilder = uri.getAbsolutePathBuilder().replacePath("myapp/films");
-                	URI locationHeader = uriBuilder.path(association.getImdbID()).path("theaters").build();
+                    // TODO find a solution less dependente on the context
+                    UriBuilder uriBuilder = uri.getAbsolutePathBuilder().replacePath("myapp/films");
+                    URI locationHeader = uriBuilder.path(association.getImdbID()).path("theaters").build();
                     responseCreated = Response.created(locationHeader).build();
                 }
             }
+        } else {
+            responseFilmIdKo = Response.status(Response.Status.BAD_REQUEST).build();
         }
-        if (responseCreated != null)
+        if (responseCreated != null) {
             return responseCreated;
-        else if (responseOk != null)
+        } else if (responseOk != null) {
             return responseOk;
-        return responseNotFound;
+        } else if(responseNotFound != null) {
+            return responseNotFound;
+        }
+
+        return responseFilmIdKo;
     }
 
     private boolean isValideFilmId(String filmId) {
@@ -139,22 +144,23 @@ public class FilmsResource {
     }
     
     /*
-	 * Note that the name of this method is used as a String in the 
+     * Note that the name of this method is used as a String in the
 	 * Film domain class. Must be renamed too in case of change
 	 */
-	/**
-	 * Get a list of theaters associated to an imdb film ID
-	 * 
-	 * @param filmID
-	 * @return a list of theater as application/xml
-	 * or 204 no content status code if no result
-	 */
-	@GET
-	@Path("{imdbID : tt[0-9]{7}}/theaters")
-	@Produces(MediaType.APPLICATION_XML)
-	public List<Theater> getTheatersByFilmId(
-			@PathParam("imdbID") String imdbID) {
 
-		return dao.findByFilmId(imdbID);
-	}
+    /**
+     * Get a list of theaters associated to an imdb film ID
+     *
+     * @param filmID
+     * @return a list of theater as application/xml
+     * or 204 no content status code if no result
+     */
+    @GET
+    @Path("{imdbID : tt[0-9]{7}}/theaters")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Theater> getTheatersByFilmId(
+            @PathParam("imdbID") String imdbID) {
+
+        return dao.findByFilmId(imdbID);
+    }
 }

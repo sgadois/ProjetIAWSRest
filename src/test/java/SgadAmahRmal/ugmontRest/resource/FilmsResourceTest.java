@@ -102,10 +102,8 @@ public class FilmsResourceTest {
      */
     @Test
     public void testPost() throws SQLException {
-    	Database db = Database.getInstance();
-    	int count = 39;
-    	String querytoTest = "SELECT COUNT(*) FROM film_salle";
-    	
+    	int count = filmTheaterCount();
+
     	String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
     			+ "<filmtheaters imdbID=\"tt2294629\">"
     			+ "<theater>1</theater>"
@@ -117,16 +115,96 @@ public class FilmsResourceTest {
     			.path("theaters")
     			.request(MediaType.APPLICATION_XML)
     			.post(Entity.xml(xml));
-    	ResultSet res = db.getQuery(querytoTest);
-    	int countRes = 0;
-    	if (res.next())
-    		countRes = res.getInt(1);
-    	
+
+    	int countRes = filmTheaterCount();
+
     	assertEquals(201, response.getStatus());
     	assertEquals(count + 2, countRes);
     	response.close();
     }
-    
+
+    /**
+     * Tests sur l'insertion d'une liste salles existantes dans la base
+     */
+    @Test
+    public void testPostGoodFilmIdTheatersIds() throws SQLException {
+        int count = filmTheaterCount();
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+                + "<filmtheaters imdbID=\"tt0138902\">"
+                + "<theater>1</theater>"
+                + "<theater>2</theater>"
+                + "<theater>10</theater>"
+                + "</filmtheaters>";
+
+        response = target
+                .path("films")
+                .path("theaters")
+                .request(MediaType.APPLICATION_XML)
+                .post(Entity.xml(xml));
+
+        int countRes = filmTheaterCount();
+
+        assertEquals(200, response.getStatus());
+        assertEquals(count, countRes);
+        response.close();
+    }
+
+    /**
+     * Tests de post avec un mauvais film Id
+     */
+    @Test
+    public void testPostWrongFilmId() throws SQLException {
+
+        int count = filmTheaterCount();
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+                + "<filmtheaters imdbID=\"tt123456\">"
+                + "<theater>1</theater>"
+                + "<theater>2</theater>"
+                + "<theater>10</theater>"
+                + "</filmtheaters>";
+
+        response = target
+                .path("films")
+                .path("theaters")
+                .request(MediaType.APPLICATION_XML)
+                .post(Entity.xml(xml));
+
+        int countRes = filmTheaterCount();
+
+        assertEquals(400, response.getStatus());
+        assertEquals(count , countRes);
+        response.close();
+    }
+
+    /**
+     * Tests de la methode post avec des salle_ids invalides
+     */
+    @Test
+    public void testPostWrongTheatersIds() throws SQLException {
+
+        int count = filmTheaterCount();
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+                + "<filmtheaters imdbID=\"tt0132614\">"
+                + "<theater>17</theater>"
+                + "<theater>19</theater>"
+                + "<theater>100</theater>"
+                + "</filmtheaters>";
+
+        response = target
+                .path("films")
+                .path("theaters")
+                .request(MediaType.APPLICATION_XML)
+                .post(Entity.xml(xml));
+
+        int countRes = filmTheaterCount();
+
+        assertEquals(404, response.getStatus());
+        assertEquals(count , countRes);
+        response.close();
+    }
+
     /*
      * Tests sur l'obtention de la liste de salles affectées à un film
      */
@@ -215,4 +293,16 @@ public class FilmsResourceTest {
 		list.add(theater8);
 		return list;
 	}
+
+    private int filmTheaterCount() throws SQLException {
+
+        Database db = Database.getInstance();
+        int count = 0;
+        String querytoTest = "SELECT COUNT(*) FROM film_salle";
+        ResultSet res = db.getQuery(querytoTest);
+
+        if (res.next())
+            count = res.getInt(1);
+        return  count;
+    }
 }
