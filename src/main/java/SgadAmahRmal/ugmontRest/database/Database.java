@@ -47,7 +47,7 @@ public class Database {
 		}
 	}
 	
-	public int update(String intructionSql) {
+	public int saveUpdateOrDelete(String intructionSql) {
 		try {
 			return stat.executeUpdate(intructionSql);
 		} catch (SQLException e) {
