@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -21,13 +20,13 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NoContentException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import SgadAmahRmal.ugmontRest.dao.ITheaterDao;
 import SgadAmahRmal.ugmontRest.domain.Film;
+import SgadAmahRmal.ugmontRest.domain.FilmTheater;
 import SgadAmahRmal.ugmontRest.domain.OmdbFilm;
 import SgadAmahRmal.ugmontRest.domain.Theater;
 
@@ -85,37 +84,34 @@ public class FilmsResource {
     }
 
     /**
-     * @param film: an imdbID
-     * @param theaters: a theater id
-     * @return a response:
-     * 201 creation success
-     * 200 association already exist
-     * 404 invalid filmId or theaterId
+     * 
+     * @param association
+     * @param uri: context
+     * @return response
      */
     @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_XML)
     @Path("theaters")
     public Response storeFilmTheater(
-            @FormParam("imdbID") String filmId,
-            @FormParam("theaterList") List<String> theatersIds,
+            FilmTheater association,
             @Context UriInfo uri) {
     	
-    	if (filmId == null || theatersIds == null)
+    	if (association.getImdbID() == null || association.getTheaterIds() == null)
     		throw new BadRequestException();
         Response responseNotFound = null;
         Response responseOk = null;
         Response responseCreated = null;
-        if (isValideFilmId(filmId)) {
-            for (String theater : theatersIds) {
+        if (isValideFilmId(association.getImdbID())) {
+            for (String theater : association.getTheaterIds()) {
                 if (dao.find(theater) == null && responseNotFound == null) {
                     responseNotFound = Response.status(Response.Status.NOT_FOUND).build();
                 }
-                else if (!dao.saveFilmTheater(filmId, theater) && responseOk == null)
+                else if (!dao.saveFilmTheater(association.getImdbID(), theater) && responseOk == null)
                     responseOk = Response.status(Response.Status.OK).build();
                 else {
                 	// TODO find a solution less dependente on the context
                 	UriBuilder uriBuilder = uri.getAbsolutePathBuilder().replacePath("myapp/films");
-                	URI locationHeader = uriBuilder.path(filmId).path("theaters").build();
+                	URI locationHeader = uriBuilder.path(association.getImdbID()).path("theaters").build();
                     responseCreated = Response.created(locationHeader).build();
                 }
             }

@@ -15,9 +15,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -52,7 +50,7 @@ public class FilmsResourceTest {
     /* 
      * Tests sur la recherche de films
      */
-    /*@Test
+    @Test
     public void testFindFilmsOkNoYear() {
     	response = target.path("films")
     			.queryParam("title", "there+will+be+blood")
@@ -97,7 +95,7 @@ public class FilmsResourceTest {
     			.request(MediaType.APPLICATION_XML).get();
         assertEquals(204, response.getStatus());
         response.close();
-    }*/
+    }
     
     /* 
      * Tests sur l'affectation d'un film à une ou plusieurs salles
@@ -108,19 +106,17 @@ public class FilmsResourceTest {
     	int count = 39;
     	String querytoTest = "SELECT COUNT(*) FROM film_salle";
     	
-    	List<String> ids = new ArrayList<String>(2);
-    	ids.add("1");
-    	ids.add("2");
-    	Form form = new Form();
-    	form.param("imdbID", "tt2294629"); // imdb Frozen
-    	MultivaluedMap<String, String> map = form.asMap();
-    	map.addAll("theaterList", ids);
+    	String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+    			+ "<theaters imdbID=\"tt2294629\">"
+    			+ "<theater>1</theater>"
+    			+ "<theater>2</theater>"
+    			+ "</theaters>";
     	
     	response = target
     			.path("films")
     			.path("theaters")
-    			.request(MediaType.APPLICATION_FORM_URLENCODED)
-    			.post(Entity.form(form));
+    			.request(MediaType.APPLICATION_XML)
+    			.post(Entity.xml(xml));
     	ResultSet res = db.getQuery(querytoTest);
     	int countRes = 0;
     	if (res.next())
