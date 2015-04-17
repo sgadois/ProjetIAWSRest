@@ -107,10 +107,10 @@ public class FilmsResourceTest {
     	String querytoTest = "SELECT COUNT(*) FROM film_salle";
     	
     	String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-    			+ "<theaters imdbID=\"tt2294629\">"
+    			+ "<filmtheaters imdbID=\"tt2294629\">"
     			+ "<theater>1</theater>"
     			+ "<theater>2</theater>"
-    			+ "</theaters>";
+    			+ "</filmtheaters>";
     	
     	response = target
     			.path("films")
