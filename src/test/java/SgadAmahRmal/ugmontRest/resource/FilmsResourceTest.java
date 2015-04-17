@@ -101,10 +101,9 @@ public class FilmsResourceTest {
      * Tests sur l'affectation d'un film à une ou plusieurs salles
      */
     @Test
-    public void testPost() throws SQLException {
+    public void testStoreFilmTheaterValid() throws SQLException {
     	int count = filmTheaterCount();
-
-    	String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
     			+ "<filmtheaters imdbID=\"tt2294629\">"
     			+ "<theater>1</theater>"
     			+ "<theater>2</theater>"
@@ -123,11 +122,11 @@ public class FilmsResourceTest {
     	response.close();
     }
 
-    /**
+    /*
      * Tests sur l'insertion d'une liste salles existantes dans la base
      */
     @Test
-    public void testPostGoodFilmIdTheatersIds() throws SQLException {
+    public void testStoreFilmTheaterAlreadyExist() throws SQLException {
         int count = filmTheaterCount();
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<filmtheaters imdbID=\"tt0138902\">"
@@ -149,14 +148,12 @@ public class FilmsResourceTest {
         response.close();
     }
 
-    /**
+    /*
      * Tests de post avec un mauvais film Id
      */
     @Test
-    public void testPostWrongFilmId() throws SQLException {
-
+    public void testStoreFilmTheaterWrongFilmId() throws SQLException {
         int count = filmTheaterCount();
-
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<filmtheaters imdbID=\"tt123456\">"
                 + "<theater>1</theater>"
@@ -177,14 +174,12 @@ public class FilmsResourceTest {
         response.close();
     }
 
-    /**
+    /*
      * Tests de la methode post avec des salle_ids invalides
      */
     @Test
-    public void testPostWrongTheatersIds() throws SQLException {
-
+    public void testStoreFilmTheaterWrongTheatersIds() throws SQLException {
         int count = filmTheaterCount();
-
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<filmtheaters imdbID=\"tt0132614\">"
                 + "<theater>17</theater>"
@@ -200,14 +195,28 @@ public class FilmsResourceTest {
 
         int countRes = filmTheaterCount();
 
-        assertEquals(404, response.getStatus());
+        assertEquals(204, response.getStatus());
         assertEquals(count , countRes);
         response.close();
     }
 
+    private int filmTheaterCount() throws SQLException {
+
+        Database db = Database.getInstance();
+        int count = 0;
+        String querytoTest = "SELECT COUNT(*) FROM film_salle";
+        ResultSet res = db.getQuery(querytoTest);
+
+        if (res.next())
+            count = res.getInt(1);
+        return  count;
+    }
+    
+    
     /*
      * Tests sur l'obtention de la liste de salles affectées à un film
      */
+
     @Test
 	public void testGetTheatersByFilmIdIncorrectId() {
 		// Given
@@ -294,15 +303,4 @@ public class FilmsResourceTest {
 		return list;
 	}
 
-    private int filmTheaterCount() throws SQLException {
-
-        Database db = Database.getInstance();
-        int count = 0;
-        String querytoTest = "SELECT COUNT(*) FROM film_salle";
-        ResultSet res = db.getQuery(querytoTest);
-
-        if (res.next())
-            count = res.getInt(1);
-        return  count;
-    }
 }

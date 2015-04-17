@@ -95,37 +95,33 @@ public class FilmsResource {
             FilmTheater association,
             @Context UriInfo uri) {
 
-        if (association.getImdbID() == null || association.getTheaterIds() == null)
-            throw new BadRequestException();
-        Response responseNotFound = null;
-        Response responseOk = null;
-        Response responseCreated = null;
-        Response responseFilmIdKo = null;
-        if (isValideFilmId(association.getImdbID())) {
-            for (String theater : association.getTheaterIds()) {
-                if (dao.find(theater) == null) {
-                    responseNotFound = Response.status(Response.Status.NOT_FOUND).build();
-                } else if (!dao.saveFilmTheater(association.getImdbID(), theater))
-                    responseOk = Response.status(Response.Status.OK).build();
-                else {
-                    // TODO find a solution less dependente on the context
-                    UriBuilder uriBuilder = uri.getAbsolutePathBuilder().replacePath("myapp/films");
-                    URI locationHeader = uriBuilder.path(association.getImdbID()).path("theaters").build();
-                    responseCreated = Response.created(locationHeader).build();
-                }
+        if (association.getImdbID() == null
+        		|| association.getTheaterIds() == null)
+            return Response.status(Response.Status.NO_CONTENT).build();
+        if (!association.getImdbID().matches("tt[0-9]{7}")
+        		|| !isValideFilmId(association.getImdbID()))
+        	return Response.status(Response.Status.BAD_REQUEST).build();
+        
+        boolean ok = false;
+        boolean created = false;
+        for (String theater : association.getTheaterIds()) {
+            if (dao.find(theater) != null) {
+            	if (!dao.saveFilmTheater(association.getImdbID(), theater))
+                    ok = true;
+                else
+                    created = true;
             }
-        } else {
-            responseFilmIdKo = Response.status(Response.Status.BAD_REQUEST).build();
         }
-        if (responseCreated != null) {
-            return responseCreated;
-        } else if (responseOk != null) {
-            return responseOk;
-        } else if(responseNotFound != null) {
-            return responseNotFound;
+        
+        if (created) {
+        	UriBuilder uriBuilder = uri.getAbsolutePathBuilder().replacePath("myapp/films");
+            URI locationHeader = uriBuilder.path(association.getImdbID()).path("theaters").build();
+            return Response.created(locationHeader).build();
         }
-
-        return responseFilmIdKo;
+        else if (ok) {
+        	return Response.status(Response.Status.OK).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     private boolean isValideFilmId(String filmId) {
