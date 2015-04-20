@@ -84,9 +84,14 @@ public class FilmsResource {
     }
 
     /**
-     * @param association
-     * @param uri:        context
-     * @return response
+     * Store association film / theaters
+     * 
+     * @param association:  xml with imdbID and list of theaters
+     * @param uri:          context
+     * @return response:    201 at least one record save, 
+     *                      200 record already exist, 
+     *                      204 empty xml or theaters ids does not exist,
+     *                      400 invalid imdbID
      */
     @POST
     @Consumes(MediaType.APPLICATION_XML)
@@ -147,7 +152,7 @@ public class FilmsResource {
     /**
      * Get a list of theaters associated to an imdb film ID
      *
-     * @param filmID
+     * @param imdbID: an imdb id
      * @return a list of theater as application/xml
      * or 204 no content status code if no result
      */

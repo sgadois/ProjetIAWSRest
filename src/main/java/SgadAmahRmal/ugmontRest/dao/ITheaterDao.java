@@ -11,7 +11,7 @@ import SgadAmahRmal.ugmontRest.domain.Theater;
 public interface ITheaterDao {
 
     /**
-     * Get a theater by it ID.
+     * Get a theater by its ID.
      *
      * @param id of the theater required
      * @return Theater or null if it does not exist
@@ -37,9 +37,9 @@ public interface ITheaterDao {
     /**
      * Associate film and theater
      *
-     * @param imdbID  title of film
-     * @param theaterId  id of theater
-     * @return success or fail message
+     * @param imdbID imdb of film
+     * @param theaterId id of theater
+     * @return true if it saved successfully
      */
     public boolean saveFilmTheater(String imdbID, String theaterId);
 

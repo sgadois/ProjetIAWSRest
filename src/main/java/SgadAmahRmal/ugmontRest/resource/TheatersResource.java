@@ -28,13 +28,13 @@ public class TheatersResource {
 	private ITheaterDao dao;
 
 	/**
-	 * Search theaters with criteria
+	 * Search theaters by criteria
 	 * 
-	 * @param departement: two digits required
-	 * @param city: city name
-	 * @param name: theater name
-	 * @param zipcode: five digits
-	 * @return a list of theater as application/xml
+	 * @param dep:     two digits for the department required
+	 * @param city:    city name
+	 * @param name:    theater name
+	 * @param cp:      five digits
+	 * @return list of theater as application/xml
 	 * or 204 no content status code if no result
 	 */
     @GET
